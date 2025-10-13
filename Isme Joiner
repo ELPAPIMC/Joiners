@@ -12,9 +12,8 @@ local attemptCount = 0
 
 -- Lista de usuarios Premium
 local premiumUsers = {
-    "Usuario1",
-    "Usuario2",
-    "Usuario3",
+    "zWEKITO",
+    "raimind7284",
     -- Agrega más usuarios aquí
 }
 
