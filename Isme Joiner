@@ -30,9 +30,9 @@ end
 local searchDelay = isPremium and 0.5 or 2
 
 -- Colores según edición
-local primaryColor = isPremium and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(100, 255, 100)
-local secondaryColor = isPremium and Color3.fromRGB(50, 255, 150) or Color3.fromRGB(150, 255, 100)
-local accentColor = isPremium and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(255, 0, 150)
+local primaryColor = isPremium and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(100, 255, 100)
+local secondaryColor = isPremium and Color3.fromRGB(255, 200, 50) or Color3.fromRGB(120, 255, 120)
+local accentColor = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
 
 -- Crear ScreenGui
 local screenGui = Instance.new("ScreenGui")
@@ -61,15 +61,15 @@ stroke.Parent = mainFrame
 local strokeGradient = Instance.new("UIGradient")
 if isPremium then
     strokeGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 200, 80))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(218, 165, 32))
     }
 else
     strokeGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 200, 80))
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 200, 80))
     }
 end
 strokeGradient.Parent = stroke
@@ -98,14 +98,14 @@ titleLabel.Parent = mainFrame
 local textGradient = Instance.new("UIGradient")
 if isPremium then
     textGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 100))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
     }
 else
     textGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
         ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
     }
 end
@@ -135,14 +135,14 @@ editionLabel.Parent = mainFrame
 local editionGradient = Instance.new("UIGradient")
 if isPremium then
     editionGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 100))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
     }
 else
     editionGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
         ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
     }
 end
@@ -279,7 +279,7 @@ toggleButton.MouseButton1Click:Connect(function()
     joinerActive = not joinerActive
     
     if joinerActive then
-        toggleButton.BackgroundColor3 = isPremium and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(50, 200, 50)
+        toggleButton.BackgroundColor3 = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
         toggleButton.Text = "ON"
         attemptCount = 0
         updateLog("Starting server hop...\n" .. (isPremium and "Premium Mode" or "FreeMium Mode"))
