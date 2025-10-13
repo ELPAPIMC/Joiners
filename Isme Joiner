@@ -1,0 +1,265 @@
+-- Isme Joiner Script para Roblox
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+
+-- Variables
+local player = Players.LocalPlayer
+local joinerActive = false
+local placeId = game.PlaceId
+local attemptCount = 0
+
+-- Lista de usuarios Premium
+local premiumUsers = {
+    "zWEKITO",
+    "raimind7284",
+}
+
+-- Verificar si el usuario es premium
+local isPremium = false
+for _, username in pairs(premiumUsers) do
+    if player.Name == username then
+        isPremium = true
+        break
+    end
+end
+
+-- Crear ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "IsmeJoinerGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Frame principal
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 250, 0, 180)
+mainFrame.Position = UDim2.new(0.5, -125, 0.5, -90)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = mainFrame
+
+-- Stroke animado
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(255, 0, 150)
+stroke.Thickness = 2
+stroke.Parent = mainFrame
+
+local strokeGradient = Instance.new("UIGradient")
+strokeGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 150)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 150, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 255, 0))
+}
+strokeGradient.Parent = stroke
+
+-- Animación del stroke
+spawn(function()
+    while wait() do
+        for i = 0, 360, 3 do
+            strokeGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
+-- Texto con gradiente animado
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -20, 0, 35)
+titleLabel.Position = UDim2.new(0, 10, 0, 8)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Isme Joiner"
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 20
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Parent = mainFrame
+
+local textGradient = Instance.new("UIGradient")
+textGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 150)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 150, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 150))
+}
+textGradient.Parent = titleLabel
+
+-- Animación del gradiente del texto
+spawn(function()
+    while wait() do
+        for i = 0, 360, 2 do
+            textGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
+-- Toggle Frame
+local toggleFrame = Instance.new("Frame")
+toggleFrame.Size = UDim2.new(0, 180, 0, 40)
+toggleFrame.Position = UDim2.new(0.5, -90, 0, 50)
+toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+toggleFrame.BorderSizePixel = 0
+toggleFrame.Parent = mainFrame
+
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 8)
+toggleCorner.Parent = toggleFrame
+
+-- Label del toggle
+local toggleLabel = Instance.new("TextLabel")
+toggleLabel.Size = UDim2.new(0, 100, 1, 0)
+toggleLabel.Position = UDim2.new(0, 8, 0, 0)
+toggleLabel.BackgroundTransparency = 1
+toggleLabel.Text = "Joiner:"
+toggleLabel.Font = Enum.Font.Gotham
+toggleLabel.TextSize = 14
+toggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+toggleLabel.Parent = toggleFrame
+
+-- Botón toggle
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 55, 0, 26)
+toggleButton.Position = UDim2.new(1, -63, 0.5, -13)
+toggleButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+toggleButton.BorderSizePixel = 0
+toggleButton.Text = "OFF"
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 12
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Parent = toggleFrame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 6)
+buttonCorner.Parent = toggleButton
+
+-- Frame del log
+local logFrame = Instance.new("Frame")
+logFrame.Size = UDim2.new(1, -20, 0, 75)
+logFrame.Position = UDim2.new(0, 10, 0, 95)
+logFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+logFrame.BorderSizePixel = 0
+logFrame.Parent = mainFrame
+
+local logCorner = Instance.new("UICorner")
+logCorner.CornerRadius = UDim.new(0, 8)
+logCorner.Parent = logFrame
+
+-- Título del log
+local logTitle = Instance.new("TextLabel")
+logTitle.Size = UDim2.new(1, -10, 0, 18)
+logTitle.Position = UDim2.new(0, 5, 0, 3)
+logTitle.BackgroundTransparency = 1
+logTitle.Text = "Log:"
+logTitle.Font = Enum.Font.GothamBold
+logTitle.TextSize = 12
+logTitle.TextColor3 = Color3.fromRGB(180, 180, 200)
+logTitle.TextXAlignment = Enum.TextXAlignment.Left
+logTitle.Parent = logFrame
+
+-- Texto del log
+local logLabel = Instance.new("TextLabel")
+logLabel.Size = UDim2.new(1, -10, 1, -22)
+logLabel.Position = UDim2.new(0, 5, 0, 20)
+logLabel.BackgroundTransparency = 1
+logLabel.Text = "Waiting..."
+logLabel.Font = Enum.Font.Code
+logLabel.TextSize = 10
+logLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+logLabel.TextXAlignment = Enum.TextXAlignment.Left
+logLabel.TextYAlignment = Enum.TextYAlignment.Top
+logLabel.TextWrapped = true
+logLabel.Parent = logFrame
+
+-- Función para actualizar el log
+local function updateLog(message)
+    logLabel.Text = message
+end
+
+-- Función para hacer server hop
+local function serverHop()
+    if not joinerActive then return end
+    
+    attemptCount = attemptCount + 1
+    updateLog("Searching servers...\nAttempt #" .. attemptCount)
+    
+    local success, result = pcall(function()
+        local servers = HttpService:JSONDecode(game:HttpGet(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
+        
+        if servers and servers.data then
+            for _, server in pairs(servers.data) do
+                if server.id ~= game.JobId and server.playing < server.maxPlayers then
+                    updateLog("Attempt: JobId\n" .. server.id .. "\nPlayers: " .. server.playing .. "/" .. server.maxPlayers)
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
+                    return
+                end
+            end
+            updateLog("No servers found.\nRetrying...")
+        end
+    end)
+    
+    if not success then
+        updateLog("Error: " .. tostring(result):sub(1, 50) .. "...")
+        wait(1)
+        if joinerActive then
+            serverHop()
+        end
+    end
+end
+
+-- Evento del botón toggle
+toggleButton.MouseButton1Click:Connect(function()
+    joinerActive = not joinerActive
+    
+    if joinerActive then
+        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+        toggleButton.Text = "ON"
+        attemptCount = 0
+        updateLog("Starting server hop...")
+        spawn(function()
+            while joinerActive do
+                serverHop()
+                wait(0.5)
+            end
+        end)
+    else
+        toggleButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+        toggleButton.Text = "OFF"
+        updateLog("Stopped.")
+    end
+end)
+
+-- Sistema de arrastre mejorado
+local dragging = false
+local dragInput, dragStart, startPos
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
