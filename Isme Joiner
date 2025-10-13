@@ -12,8 +12,10 @@ local attemptCount = 0
 
 -- Lista de usuarios Premium
 local premiumUsers = {
-    "zWEKITO",
-    "raimind7284",
+    "Usuario1",
+    "Usuario2",
+    "Usuario3",
+    -- Agrega más usuarios aquí
 }
 
 -- Verificar si el usuario es premium
@@ -25,6 +27,14 @@ for _, username in pairs(premiumUsers) do
     end
 end
 
+-- Velocidad de búsqueda según edición
+local searchDelay = isPremium and 0.5 or 2
+
+-- Colores según edición
+local primaryColor = isPremium and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(100, 255, 100)
+local secondaryColor = isPremium and Color3.fromRGB(50, 255, 150) or Color3.fromRGB(150, 255, 100)
+local accentColor = isPremium and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(255, 0, 150)
+
 -- Crear ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "IsmeJoinerGui"
@@ -33,8 +43,8 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 
 -- Frame principal
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 250, 0, 180)
-mainFrame.Position = UDim2.new(0.5, -125, 0.5, -90)
+mainFrame.Size = UDim2.new(0, 250, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -125, 0.5, -100)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
@@ -45,16 +55,24 @@ corner.Parent = mainFrame
 
 -- Stroke animado
 local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(255, 0, 150)
+stroke.Color = primaryColor
 stroke.Thickness = 2
 stroke.Parent = mainFrame
 
 local strokeGradient = Instance.new("UIGradient")
-strokeGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 150)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 150, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 255, 0))
-}
+if isPremium then
+    strokeGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 200, 80))
+    }
+else
+    strokeGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 200, 80))
+    }
+end
 strokeGradient.Parent = stroke
 
 -- Animación del stroke
@@ -69,8 +87,8 @@ end)
 
 -- Texto con gradiente animado
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -20, 0, 35)
-titleLabel.Position = UDim2.new(0, 10, 0, 8)
+titleLabel.Size = UDim2.new(1, -20, 0, 30)
+titleLabel.Position = UDim2.new(0, 10, 0, 5)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Isme Joiner"
 titleLabel.Font = Enum.Font.GothamBold
@@ -79,11 +97,19 @@ titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.Parent = mainFrame
 
 local textGradient = Instance.new("UIGradient")
-textGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 150)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 150, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 150))
-}
+if isPremium then
+    textGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 100))
+    }
+else
+    textGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
+    }
+end
 textGradient.Parent = titleLabel
 
 -- Animación del gradiente del texto
@@ -96,10 +122,47 @@ spawn(function()
     end
 end)
 
+-- Texto de edición
+local editionLabel = Instance.new("TextLabel")
+editionLabel.Size = UDim2.new(1, -20, 0, 18)
+editionLabel.Position = UDim2.new(0, 10, 0, 32)
+editionLabel.BackgroundTransparency = 1
+editionLabel.Text = isPremium and "Edition: Premium" or "Edition: FreeMium"
+editionLabel.Font = Enum.Font.GothamBold
+editionLabel.TextSize = 12
+editionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+editionLabel.Parent = mainFrame
+
+local editionGradient = Instance.new("UIGradient")
+if isPremium then
+    editionGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(50, 255, 150)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 100))
+    }
+else
+    editionGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(150, 255, 100)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
+    }
+end
+editionGradient.Parent = editionLabel
+
+-- Animación del gradiente de edición
+spawn(function()
+    while wait() do
+        for i = 0, 360, 2 do
+            editionGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
 -- Toggle Frame
 local toggleFrame = Instance.new("Frame")
 toggleFrame.Size = UDim2.new(0, 180, 0, 40)
-toggleFrame.Position = UDim2.new(0.5, -90, 0, 50)
+toggleFrame.Position = UDim2.new(0.5, -90, 0, 58)
 toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
 toggleFrame.BorderSizePixel = 0
 toggleFrame.Parent = mainFrame
@@ -139,7 +202,7 @@ buttonCorner.Parent = toggleButton
 -- Frame del log
 local logFrame = Instance.new("Frame")
 logFrame.Size = UDim2.new(1, -20, 0, 75)
-logFrame.Position = UDim2.new(0, 10, 0, 95)
+logFrame.Position = UDim2.new(0, 10, 0, 105)
 logFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
 logFrame.BorderSizePixel = 0
 logFrame.Parent = mainFrame
@@ -165,10 +228,10 @@ local logLabel = Instance.new("TextLabel")
 logLabel.Size = UDim2.new(1, -10, 1, -22)
 logLabel.Position = UDim2.new(0, 5, 0, 20)
 logLabel.BackgroundTransparency = 1
-logLabel.Text = "Waiting..."
+logLabel.Text = isPremium and "Premium Mode Active\nWaiting..." or "FreeMium Mode\nWaiting..."
 logLabel.Font = Enum.Font.Code
 logLabel.TextSize = 10
-logLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+logLabel.TextColor3 = primaryColor
 logLabel.TextXAlignment = Enum.TextXAlignment.Left
 logLabel.TextYAlignment = Enum.TextYAlignment.Top
 logLabel.TextWrapped = true
@@ -184,7 +247,7 @@ local function serverHop()
     if not joinerActive then return end
     
     attemptCount = attemptCount + 1
-    updateLog("Searching servers...\nAttempt #" .. attemptCount)
+    updateLog("Searching servers...\nAttempt #" .. attemptCount .. (isPremium and " (Premium Speed)" or ""))
     
     local success, result = pcall(function()
         local servers = HttpService:JSONDecode(game:HttpGet(
@@ -199,7 +262,7 @@ local function serverHop()
                     return
                 end
             end
-            updateLog("No servers found.\nRetrying...")
+            updateLog("No servers found.\nRetrying..." .. (isPremium and "\n(Premium Speed)" or ""))
         end
     end)
     
@@ -217,14 +280,14 @@ toggleButton.MouseButton1Click:Connect(function()
     joinerActive = not joinerActive
     
     if joinerActive then
-        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+        toggleButton.BackgroundColor3 = isPremium and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(50, 200, 50)
         toggleButton.Text = "ON"
         attemptCount = 0
-        updateLog("Starting server hop...")
+        updateLog("Starting server hop...\n" .. (isPremium and "Premium Mode" or "FreeMium Mode"))
         spawn(function()
             while joinerActive do
                 serverHop()
-                wait(0.5)
+                wait(searchDelay)
             end
         end)
     else
