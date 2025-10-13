@@ -10,21 +10,28 @@ local joinerActive = false
 local placeId = game.PlaceId
 local attemptCount = 0
 
--- Lista de usuarios Premium
+-- Lista de usuarios Premium (usa nombres exactos, sensible a mayúsculas)
 local premiumUsers = {
     "zWEKITO",
     "raimind7284",
     -- Agrega más usuarios aquí
 }
 
+-- Debug: imprimir nombre del jugador
+print("Jugador actual:", player.Name)
+
 -- Verificar si el usuario es premium
 local isPremium = false
 for _, username in pairs(premiumUsers) do
     if player.Name == username then
         isPremium = true
+        print("Usuario Premium detectado!")
         break
     end
 end
+
+-- Debug: mostrar estado
+print("Es Premium:", isPremium)
 
 -- Velocidad de búsqueda según edición
 local searchDelay = isPremium and 0.5 or 2
