@@ -1,4 +1,4 @@
--- Isme Joiner Script para Roblox - GUI Mejorada con Server Hop MEJORADO
+-- Isme Joiner Script para Roblox - Sistema de Server Hop Optimizado
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
@@ -10,20 +10,18 @@ local player = Players.LocalPlayer
 local joinerActive = false
 local placeId = game.PlaceId
 local attemptCount = 0
+local serverCache = {}
+local lastRequestTime = 0
+local REQUEST_COOLDOWN = 1
 
--- Lista de usuarios Premium (usa nombres exactos, sensible a mayúsculas)
+-- Lista de usuarios Premium
 local premiumUsers = {
     "zWEKITO",
     "raimind7284",
-    "pepeelcrak20021",
-    "jxgnjdxf"
-    -- Agrega más usuarios aquí
+    "pepeelcrak20021"
 }
 
--- Debug: imprimir nombre del jugador
-print("Current User:", player.Name)
-
--- Verificar si el usuario es premium
+-- Verificar usuario premium
 local isPremium = false
 for _, username in pairs(premiumUsers) do
     if player.Name == username then
@@ -32,10 +30,7 @@ for _, username in pairs(premiumUsers) do
     end
 end
 
--- Velocidad de búsqueda según edición
 local searchDelay = isPremium and 0.5 or 2
-
--- Colores según edición
 local primaryColor = isPremium and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(100, 255, 100)
 local secondaryColor = isPremium and Color3.fromRGB(255, 200, 50) or Color3.fromRGB(120, 255, 120)
 local accentColor = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
@@ -55,7 +50,6 @@ mainFrame.BorderSizePixel = 0
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Parent = screenGui
 
--- Animación de entrada desde el centro
 mainFrame.Size = UDim2.new(0, 0, 0, 0)
 mainFrame.BackgroundTransparency = 1
 local openTween = TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
@@ -68,7 +62,6 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 10)
 corner.Parent = mainFrame
 
--- Sombra del frame
 local shadow = Instance.new("Frame")
 shadow.Name = "Shadow"
 shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -82,7 +75,6 @@ local shadowCorner = Instance.new("UICorner")
 shadowCorner.CornerRadius = UDim.new(0, 10)
 shadowCorner.Parent = shadow
 
--- Stroke animado
 local stroke = Instance.new("UIStroke")
 stroke.Color = primaryColor
 stroke.Thickness = 2
@@ -104,7 +96,6 @@ else
 end
 strokeGradient.Parent = stroke
 
--- Animación del stroke
 spawn(function()
     while wait() do
         for i = 0, 360, 3 do
@@ -114,7 +105,6 @@ spawn(function()
     end
 end)
 
--- Partículas de fondo animadas
 local particlesFrame = Instance.new("Frame")
 particlesFrame.Size = UDim2.new(1, 0, 1, 0)
 particlesFrame.BackgroundTransparency = 1
@@ -122,7 +112,6 @@ particlesFrame.ClipsDescendants = true
 particlesFrame.ZIndex = 1
 particlesFrame.Parent = mainFrame
 
--- Crear partículas flotantes
 for i = 1, 8 do
     local particle = Instance.new("Frame")
     particle.Size = UDim2.new(0, math.random(2, 4), 0, math.random(2, 4))
@@ -137,7 +126,6 @@ for i = 1, 8 do
     particleCorner.CornerRadius = UDim.new(1, 0)
     particleCorner.Parent = particle
     
-    -- Animación flotante
     spawn(function()
         while wait() do
             local randomX = math.random()
@@ -156,7 +144,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -20, 0, 30)
 titleLabel.Position = UDim2.new(0, 10, 0, 5)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Isme Joiner [ALPHA]"
+titleLabel.Text = "Isme Joiner"
 titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextSize = 20
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -164,7 +152,6 @@ titleLabel.TextTransparency = 1
 titleLabel.ZIndex = 2
 titleLabel.Parent = mainFrame
 
--- Fade in del título
 TweenService:Create(titleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.3), {
     TextTransparency = 0
 }):Play()
@@ -199,7 +186,7 @@ local editionLabel = Instance.new("TextLabel")
 editionLabel.Size = UDim2.new(1, -20, 0, 18)
 editionLabel.Position = UDim2.new(0, 10, 0, 32)
 editionLabel.BackgroundTransparency = 1
-editionLabel.Text = isPremium and "Edition: Premium ⚡" or "Edition: FreeMium"
+editionLabel.Text = isPremium and "Edition: Premium" or "Edition: FreeMium"
 editionLabel.Font = Enum.Font.GothamBold
 editionLabel.TextSize = 12
 editionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -207,7 +194,6 @@ editionLabel.TextTransparency = 1
 editionLabel.ZIndex = 2
 editionLabel.Parent = mainFrame
 
--- Fade in de la edición
 TweenService:Create(editionLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.4), {
     TextTransparency = 0
 }):Play()
@@ -247,7 +233,6 @@ toggleFrame.BackgroundTransparency = 1
 toggleFrame.ZIndex = 2
 toggleFrame.Parent = mainFrame
 
--- Fade in del toggle frame
 TweenService:Create(toggleFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.5), {
     BackgroundTransparency = 0
 }):Play()
@@ -256,7 +241,6 @@ local toggleCorner = Instance.new("UICorner")
 toggleCorner.CornerRadius = UDim.new(0, 8)
 toggleCorner.Parent = toggleFrame
 
--- Hover effect para toggle frame
 toggleFrame.MouseEnter:Connect(function()
     TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
         BackgroundColor3 = Color3.fromRGB(40, 40, 50)
@@ -297,7 +281,6 @@ local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 6)
 buttonCorner.Parent = toggleButton
 
--- Animación de hover para el botón
 toggleButton.MouseEnter:Connect(function()
     TweenService:Create(toggleButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
         Size = UDim2.new(0, 58, 0, 28)
@@ -320,7 +303,6 @@ statsFrame.BackgroundTransparency = 1
 statsFrame.ZIndex = 2
 statsFrame.Parent = mainFrame
 
--- Fade in del stats frame
 TweenService:Create(statsFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.6), {
     BackgroundTransparency = 0
 }):Play()
@@ -333,7 +315,7 @@ local statsLabel = Instance.new("TextLabel")
 statsLabel.Size = UDim2.new(1, -10, 1, 0)
 statsLabel.Position = UDim2.new(0, 5, 0, 0)
 statsLabel.BackgroundTransparency = 1
-statsLabel.Text = "Attempts: 0 | Speed: " .. (isPremium and "⚡ Fast" or "Normal")
+statsLabel.Text = "Attempts: 0 | Speed: " .. (isPremium and "Fast" or "Normal")
 statsLabel.Font = Enum.Font.Gotham
 statsLabel.TextSize = 11
 statsLabel.TextColor3 = primaryColor
@@ -341,7 +323,6 @@ statsLabel.TextXAlignment = Enum.TextXAlignment.Center
 statsLabel.ZIndex = 3
 statsLabel.Parent = statsFrame
 
--- Pulso en las stats cuando cambian
 local function pulseStats()
     local pulseTween = TweenService:Create(statsLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
         TextSize = 13
@@ -363,7 +344,6 @@ freePrivButton.BackgroundTransparency = 1
 freePrivButton.ZIndex = 2
 freePrivButton.Parent = mainFrame
 
--- Fade in del botón Free Priv
 TweenService:Create(freePrivButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.65), {
     BackgroundTransparency = 0
 }):Play()
@@ -372,7 +352,6 @@ local freePrivCorner = Instance.new("UICorner")
 freePrivCorner.CornerRadius = UDim.new(0, 8)
 freePrivCorner.Parent = freePrivButton
 
--- Hover effect para Free Priv
 freePrivButton.MouseEnter:Connect(function()
     TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
         BackgroundColor3 = Color3.fromRGB(45, 45, 55),
@@ -397,7 +376,6 @@ logFrame.BackgroundTransparency = 1
 logFrame.ZIndex = 2
 logFrame.Parent = mainFrame
 
--- Fade in del log frame
 TweenService:Create(logFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.7), {
     BackgroundTransparency = 0
 }):Play()
@@ -422,7 +400,7 @@ local logLabel = Instance.new("TextLabel")
 logLabel.Size = UDim2.new(1, -10, 1, -22)
 logLabel.Position = UDim2.new(0, 5, 0, 20)
 logLabel.BackgroundTransparency = 1
-logLabel.Text = isPremium and "⚡ Premium Mode Ready\n• Fast search enabled\n• Priority access" or "🌟 FreeMium Mode Ready\n• Standard search\n• Stable connection"
+logLabel.Text = isPremium and "Premium Mode Ready\nFast search enabled\nPriority access" or "FreeMium Mode Ready\nStandard search\nStable connection"
 logLabel.Font = Enum.Font.Code
 logLabel.TextSize = 10
 logLabel.TextColor3 = primaryColor
@@ -432,188 +410,245 @@ logLabel.TextWrapped = true
 logLabel.ZIndex = 3
 logLabel.Parent = logFrame
 
--- Función para actualizar el log con animación
+-- Función para actualizar el log
 local function updateLog(message)
-    -- Fade out
     local fadeOut = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
         TextTransparency = 1
     })
     fadeOut:Play()
     fadeOut.Completed:Wait()
     
-    -- Cambiar texto
     logLabel.Text = message
     
-    -- Fade in
     local fadeIn = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
         TextTransparency = 0
     })
     fadeIn:Play()
 end
 
--- Función para actualizar stats con animación
+-- Función para actualizar stats
 local function updateStats()
     statsLabel.Text = string.format("Attempts: %d | Speed: %s", 
         attemptCount, 
-        isPremium and "⚡ Fast" or "Normal"
+        isPremium and "Fast" or "Normal"
     )
     pulseStats()
 end
 
--- Función para buscar servidor vacío (Free Priv)
-local function findEmptyServer()
-    updateLog("🔍 Searching empty server...\nFree Priv Mode")
+-- Función para obtener servidores con rate limiting
+local function getServers(cursor)
+    local currentTime = tick()
+    local timeSinceLastRequest = currentTime - lastRequestTime
+    
+    if timeSinceLastRequest < REQUEST_COOLDOWN then
+        wait(REQUEST_COOLDOWN - timeSinceLastRequest)
+    end
+    
+    lastRequestTime = tick()
+    
+    local url = string.format(
+        "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100",
+        placeId
+    )
+    
+    if cursor and cursor ~= "" then
+        url = url .. "&cursor=" .. cursor
+    end
     
     local success, result = pcall(function()
-        local servers = HttpService:JSONDecode(game:HttpGet(
-            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-        ))
-        
-        if servers and servers.data then
-            -- Buscar servidor completamente vacío
-            for _, server in pairs(servers.data) do
-                if server.id ~= game.JobId and server.playing == 0 then
-                    updateLog("✅ Empty server found!\nJobId: " .. server.id:sub(1, 8) .. "...\nConnecting...")
-                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
-                    return true
-                end
-            end
-            
-            -- Si no hay servidor vacío, buscar el más vacío posible
-            local bestServer = nil
-            local minPlayers = 999
-            
-            for _, server in pairs(servers.data) do
-                if server.id ~= game.JobId and server.playing < minPlayers and server.playing < server.maxPlayers then
-                    bestServer = server
-                    minPlayers = server.playing
-                end
-            end
-            
-            if bestServer then
-                updateLog("⚠️ No empty servers\nBest option: " .. bestServer.playing .. " players\nConnecting...")
-                TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
-                return true
-            else
-                updateLog("❌ No available servers\nTry again later")
-                return false
-            end
-        end
+        return HttpService:JSONDecode(game:HttpGet(url))
     end)
     
-    if not success then
-        updateLog("⚠️ Error searching servers\n" .. tostring(result):sub(1, 40))
+    if success then
+        return result
+    else
+        return nil, result
     end
 end
 
----
--- ********************************************
--- * FUNCIÓN DE SERVER HOP MEJORADA (v3.3)    *
--- ********************************************
----
-local function serverHop()
-    if not joinerActive then return end
-
-    attemptCount = attemptCount + 1
-    updateStats()
-    updateLog(string.format("🔍 Searching servers...\nAttempt #%d%s",
-        attemptCount,
-        isPremium and " (Premium Speed)" or ""
-    ))
-
-    local hasFoundServer = false
-    local cursor = nil
-    -- Premium puede buscar en más páginas para mayor probabilidad
-    local maxPagesToSearch = isPremium and 5 or 3 
-
-    for page = 1, maxPagesToSearch do
-        if hasFoundServer then break end
+-- Función para buscar servidor vacío (Free Priv)
+local function findEmptyServer()
+    updateLog("Free Priv Mode\nSearching empty server...")
+    
+    local maxPages = 3
+    local currentPage = 0
+    local cursor = ""
+    
+    while currentPage < maxPages do
+        local servers, error = getServers(cursor)
         
-        local success, result = pcall(function()
-            -- Construir la URL con el cursor si existe
-            local url = string.format(
-                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
-                placeId,
-                cursor and "&cursor=" .. cursor or ""
-            )
-
-            local response = game:HttpGet(url)
-            local servers = HttpService:JSONDecode(response)
-
-            if servers and servers.data then
-                local bestServer = nil
-                local minPlayers = 999
-                
-                -- Buscar el servidor con menos jugadores
-                for _, server in pairs(servers.data) do
-                    -- Ignorar el servidor actual y servidores llenos
-                    if server.id ~= game.JobId and server.playing < server.maxPlayers then
-                        if server.playing < minPlayers then
-                            minPlayers = server.playing
-                            bestServer = server
-                        end
-                    end
-                end
-
-                if bestServer then
+        if not servers then
+            if error and (tostring(error):find("429") or tostring(error):find("limit")) then
+                updateLog("Rate limited\nWaiting 10 seconds...")
+                wait(10)
+                return
+            else
+                updateLog("Connection error\nRetrying...")
+                wait(2)
+                return
+            end
+        end
+        
+        if servers.data then
+            for _, server in pairs(servers.data) do
+                if server.id ~= game.JobId and server.playing == 0 then
                     updateLog(string.format(
-                        "✅ Server found!\nJobId: %s...\nPlayers: %d/%d (Page %d)",
-                        bestServer.id:sub(1, 8),
-                        bestServer.playing,
-                        bestServer.maxPlayers,
-                        page
+                        "Empty server found\nPlayers: 0/%d\nConnecting...",
+                        server.maxPlayers
                     ))
-                    TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
-                    hasFoundServer = true 
+                    wait(0.5)
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
                     return
-                else
-                    -- No se encontró servidor ideal, pasar a la siguiente página si hay cursor
-                    cursor = servers.nextPageCursor
-                    
-                    if not cursor then
-                        break -- No hay más páginas
-                    end
                 end
             end
-        end)
-
-        if not success then
-            updateLog("⚠️ API Error on page " .. page .. "\n" .. tostring(result):sub(1, 40) .. "...")
-            wait(1) 
-            break 
-        end
-        
-        if not hasFoundServer and cursor then
-            wait(searchDelay * 0.5) -- Pausa antes de la siguiente página
+            
+            if servers.nextPageCursor then
+                cursor = servers.nextPageCursor
+                currentPage = currentPage + 1
+                updateLog(string.format("Checking page %d...", currentPage + 1))
+                wait(0.3)
+            else
+                break
+            end
+        else
+            break
         end
     end
-
-    if not hasFoundServer then
-        updateLog("❌ No available servers found.\nRetrying in " .. searchDelay .. "s...")
+    
+    -- Buscar servidor con menos jugadores
+    updateLog("No empty servers\nFinding best option...")
+    wait(0.5)
+    
+    local servers = getServers("")
+    if servers and servers.data then
+        local bestServer = nil
+        local minPlayers = 999
+        
+        for _, server in pairs(servers.data) do
+            if server.id ~= game.JobId and server.playing < minPlayers and server.playing < server.maxPlayers then
+                bestServer = server
+                minPlayers = server.playing
+            end
+        end
+        
+        if bestServer then
+            local playerRatio = math.floor((bestServer.playing / bestServer.maxPlayers) * 100)
+            updateLog(string.format(
+                "Best server found\nPlayers: %d/%d (%d%%)\nConnecting...",
+                bestServer.playing,
+                bestServer.maxPlayers,
+                playerRatio
+            ))
+            wait(0.5)
+            TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
+        else
+            updateLog("No available servers\nTry again later")
+        end
     end
 end
 
--- Evento del botón toggle con animación
+-- Función mejorada de server hop
+local function serverHop()
+    if not joinerActive then return false end
+    
+    attemptCount = attemptCount + 1
+    updateStats()
+    updateLog(string.format("Searching servers...\nAttempt #%d", attemptCount))
+    
+    local servers, error = getServers("")
+    
+    if not servers then
+        if error and (tostring(error):find("429") or tostring(error):find("limit")) then
+            updateLog("Rate limited\nWaiting 5 seconds...")
+            wait(5)
+            return false
+        elseif error and tostring(error):find("HTTP") then
+            updateLog("Connection error\nRetrying...")
+            wait(2)
+            return false
+        else
+            updateLog("Error occurred\nRetrying...")
+            wait(1)
+            return false
+        end
+    end
+    
+    if servers and servers.data then
+        local availableServers = {}
+        
+        for _, server in pairs(servers.data) do
+            if server.id ~= game.JobId and 
+               server.playing < server.maxPlayers and 
+               not serverCache[server.id] then
+                table.insert(availableServers, server)
+            end
+        end
+        
+        if #availableServers > 0 then
+            table.sort(availableServers, function(a, b)
+                if a.playing ~= b.playing then
+                    return a.playing < b.playing
+                end
+                return a.maxPlayers > b.maxPlayers
+            end)
+            
+            local bestServer = availableServers[1]
+            serverCache[bestServer.id] = true
+            
+            local cacheCount = 0
+            for _ in pairs(serverCache) do cacheCount = cacheCount + 1 end
+            if cacheCount > 50 then
+                serverCache = {}
+            end
+            
+            local playerRatio = math.floor((bestServer.playing / bestServer.maxPlayers) * 100)
+            updateLog(string.format(
+                "Server found\nPlayers: %d/%d (%d%%)\nConnecting...",
+                bestServer.playing,
+                bestServer.maxPlayers,
+                playerRatio
+            ))
+            
+            wait(0.5)
+            TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
+            return true
+        else
+            if #servers.data > 0 then
+                updateLog("All servers attempted\nClearing cache...\nRetrying...")
+                serverCache = {}
+            else
+                updateLog("No servers available\nWaiting...")
+            end
+            return false
+        end
+    else
+        updateLog("No server data\nRetrying...")
+        return false
+    end
+end
+
+-- Evento del botón toggle
 toggleButton.MouseButton1Click:Connect(function()
     joinerActive = not joinerActive
     
-    -- Animación de click
     local clickTween = TweenService:Create(toggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
         Size = UDim2.new(0, 50, 0, 24)
     })
     clickTween:Play()
     
     if joinerActive then
-        -- Animación de color a ON
         TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
             BackgroundColor3 = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
         }):Play()
         toggleButton.Text = "ON"
         attemptCount = 0
+        serverCache = {}
         updateStats()
-        updateLog("Starting server hop...\n" .. (isPremium and "Premium Mode" or "FreeMium Mode"))
+        updateLog(string.format(
+            "Starting server hop\n%s\nReady to search",
+            isPremium and "Premium Mode" or "FreeMium Mode"
+        ))
         
-        -- Pulso en el frame cuando se activa
         local pulseTween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
             Size = UDim2.new(0, 285, 0, 285)
         })
@@ -621,29 +656,33 @@ toggleButton.MouseButton1Click:Connect(function()
         
         spawn(function()
             while joinerActive do
-                serverHop()
-                wait(searchDelay)
+                local success = serverHop()
+                if not success then
+                    wait(searchDelay + 1)
+                else
+                    wait(searchDelay)
+                end
             end
         end)
     else
-        -- Animación de color a OFF
         TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
             BackgroundColor3 = Color3.fromRGB(200, 50, 50)
         }):Play()
         toggleButton.Text = "OFF"
-        updateLog("Stopped.")
+        updateLog(string.format(
+            "Stopped\nTotal attempts: %d\nReady for next search",
+            attemptCount
+        ))
     end
 end)
 
 -- Evento del botón Free Priv
 freePrivButton.MouseButton1Click:Connect(function()
-    -- Animación de click
     local clickTween = TweenService:Create(freePrivButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
         Size = UDim2.new(1, -25, 0, 32)
     })
     clickTween:Play()
     
-    -- Animación de color
     local colorTween = TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
         BackgroundColor3 = primaryColor
     })
@@ -651,32 +690,14 @@ freePrivButton.MouseButton1Click:Connect(function()
     
     wait(0.2)
     
-    -- Volver al color original
     TweenService:Create(freePrivButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
         BackgroundColor3 = Color3.fromRGB(35, 35, 45)
     }):Play()
     
-    -- Ejecutar búsqueda de servidor vacío
     findEmptyServer()
 end)
 
----
-## 🛡️ Manejo de Errores de Teletransporte
----
-
--- Conectar al evento de fallo de teletransporte para reintento automático
-TeleportService.TeleportInitFailed:Connect(function(placeId, reason, message)
-    if joinerActive then
-        updateLog("❗ Teleport Failed:\n" .. message .. "\nRetrying...")
-        wait(1) -- Pequeña pausa antes de reintentar
-        serverHop()
-    else
-        updateLog("❗ Teleport Failed:\n" .. message .. "\nServer Hop is OFF.")
-    end
-end)
-
-
--- Sistema de arrastre mejorado con animaciones
+-- Sistema de arrastre
 local dragging = false
 local dragInput, dragStart, startPos
 
@@ -686,7 +707,6 @@ mainFrame.InputBegan:Connect(function(input)
         dragStart = input.Position
         startPos = mainFrame.Position
         
-        -- Animación al empezar a arrastrar
         TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
             Size = UDim2.new(0, 275, 0, 275)
         }):Play()
@@ -694,7 +714,6 @@ mainFrame.InputBegan:Connect(function(input)
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
-                -- Animación al soltar
                 TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
                     Size = UDim2.new(0, 280, 0, 280)
                 }):Play()
@@ -715,7 +734,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Notificación inicial
-print("✅ Isme Joiner v3.3 (Improved) loaded successfully")
+print("Isme Joiner v2.0 loaded")
 print("Edition:", isPremium and "Premium" or "FreeMium")
 print("Player:", player.Name)
