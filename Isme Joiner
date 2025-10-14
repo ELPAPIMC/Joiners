@@ -1,1 +1,1 @@
-loadstring(game:HttpGet('https://raw.githubusercontent.com/ELPAPIMC/Joiners/refs/heads/main/Isme%20Joiner'))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ELPAPIMC/Joiners/refs/heads/main/Main%20Loader"))()
