@@ -1,1 +1,652 @@
---[[ v1.0.0 https://wearedevs.net/obfuscator ]] return(function(...)local I={"\047\071\112\048\074\054\074\115\050\065\079\048\050\077\105\121\066\079\061\061";"\117\119\100\076\089\079\061\061";"\077\112\087\109\047\065\074\085\066\111\050\099\073\054\106\084\072\099\061\061","\117\101\067\118\086\073\109\111","\076\108\066\118\076\049\109\109\067\051\050\051\069\077\106\070\047\076\061\061","\052\073\051\085\086\079\061\061";"\050\111\047\109\047\049\087\065\067\100\087\104\086\119\121\101\086\108\100\081","\075\065\103\070\074\075\067\087\068\054\051\113\052\054\077\061","\077\073\065\101\068\051\087\069\086\065\105\113\052\085\076\108\072\101\053\061";"\069\054\103\073\066\085\065\109\117\077\050\089\052\077\051\071";"\075\065\103\105\052\056\067\100\116\079\061\061";"\073\056\050\087\069\075\106\076\068\104\121\080\050\111\117\099\077\111\117\061";"\117\054\050\087\052\054\099\061";"\047\111\100\085\074\076\061\061";"\106\056\076\099\077\043\083\071\072\077\103\088\074\054\087\071\086\114\061\061","\117\056\106\070\052\101\074\100","\117\108\106\085\052\073\106\085\047\075\067\087\047\056\110\100";"\075\065\103\098\074\073\048\061";"\068\101\106\118\074\119\067\056\086\100\105\054\072\049\050\088\077\106\079\061","\072\104\067\085\117\112\068\100\068\079\061\061","\068\054\051\113\052\054\077\061";"\069\113\114\100\074\115\053\105\069\114\061\061","\075\065\103\111\047\099\061\061","\074\108\065\087\068\054\050\053","\106\054\051\070\117\054\106\118\083\112\067\100\068\054\106\119\068\054\106\049\083\076\061\061";"\047\108\087\087\117\114\061\061","\117\056\051\078\074\054\103\070","\052\043\112\061";"\052\043\083\061";"\068\073\109\099\047\073\050\084";"\069\114\061\061";"\074\108\051\070\074\076\061\061";"\050\043\121\105";"\047\108\103\078\047\108\051\085","\052\054\106\078","\074\056\110\080\052\101\083\061";"";"\074\101\050\065\047\114\061\061","\068\054\103\078\068\073\065\113\074\075\083\061";"\074\075\121\118\052\101\083\061";"\068\054\103\071\068\104\121\105\052\056\117\061","\077\111\087\047\073\112\106\057\116\056\114\085\069\075\087\111\076\108\085\061","\066\089\049\110\072\089\090\100\077\071\087\112\116\054\106\050\089\114\061\061","\089\054\065\074\047\073\083\109\077\112\103\104\106\049\114\085\069\112\053\061";"\052\054\103\087\074\104\050\085\117\056\100\078\074\099\061\061";"\072\065\121\118\067\043\067\105\050\111\077\118\072\111\049\101\116\119\083\061","\083\119\048\055\055\107\102\070\079\070\053\047\056\082\118\048\049\103\073\083\083\065\110\097\080\109\047\073\084\111\088\087\084\115\101\090\074\079\083\076\116\117\047\089\119\056\120\073\085\053\118\110\098\116\115\055\120\111\057\047\052\084\105\100\097\083\109\114\075\115\077\074\075\089\051\122\084\103\065\121\072\075\077\071\068\100\068\078\104\055\043\065\122\074\114\067\097\049\068\055\109\074\043\052\120\099\047\061"}for b,B in ipairs({{1028384-1028383,601474+-601427},{579628-579627;355928+-355895},{-830557+830591;-1025283+1025330}})do while B[347089+-347088]<B[541234+-541232]do I[B[-543786-(-543787)]],I[B[-32386-(-32388)]],B[-537391-(-537392)],B[383831-383829]=I[B[181282-181280]],I[B[177062-177061]],B[787657-787656]+(135005-135004),B[346569+-346567]-(-214046+214047)end end local function b(b)return I[b-(-307647+350192)]end do local b=table.insert local B=I local a=string.len local R=string.sub local F=math.floor local D=table.concat local N=type local l={["\043"]=790096-790093,X=921882-921871,p=441589-441585;H=-133233+133251,d=440614+-440577;y=811877-811868;b=-713308-(-713352);["\047"]=484618+-484594;["\054"]=-35497+35503;s=-320461-(-320463);Q=521632-521617,I=363318+-363296;f=324239-324179;A=-304240-(-304293),M=936964+-936944,a=68241+-68182,w=-929889-(-929924);t=-536110-(-536140),["\057"]=-257277+257335;C=1006887-1006870;P=-181622-(-181669);u=-940037+940065;l=406257+-406203,U=5773-5721;o=-446057+446096;["\056"]=572091+-572053,j=-965899+965920,m=-29071+29128,h=-697050-(-697057),S=1004588+-1004580,["\049"]=62446+-62410;W=-116170+116203,Y=-512359+512378,T=-689589+689632;z=-341895+341958;E=765609+-765595,["\052"]=-188671+188698,e=688833+-688778,r=-819972+820004;O=-391629+391629,q=806985-806951,g=108513-108452,G=139428+-139377;["\050"]=28522+-28509,["\048"]=-671470+671526,N=910187+-910141;x=-111004+111014,c=-26082-(-26130);F=896860-896815;J=279200+-279175,Z=-120836+120837,["\055"]=-96376+96418,L=-733448+733464;R=-566012-(-566074);n=945161+-945112,["\053"]=435604-435564;V=-610159-(-610185);D=-933483-(-933512);K=-889609-(-889632);v=801638-801588;i=-581081+581122;k=-222059+222090;["\051"]=-532815+532820,B=-568365-(-568377)}local n=string.char for I=798432-798431,#B,227681+-227680 do local z=B[I]if N(z)=="\115\116\114\105\110\103"then local N=a(z)local c={}local T=258741-258740 local A=-93685-(-93685)local L=-859652-(-859652)while T<=N do local I=R(z,T,T)local B=l[I]if B then A=A+B*(520496-520432)^((-476909-(-476912))-L)L=L+(-2709+2710)if L==-808206-(-808210)then L=1041241+-1041241 local I=F(A/(-839357+904893))local B=F((A%(696239-630703))/(54167+-53911))local a=A%(401328-401072)b(c,n(I,B,a))A=406992-406992 end elseif I=="\061"then b(c,n(F(A/(-914592+980128))))if T>=N or R(z,T+(-683472-(-683473)),T+(145527+-145526))~="\061"then b(c,n(F((A%(605670-540134))/(400609+-400353))))end break end T=T+(885318-885317)end B[I]=D(c)end end end return(function(I,a,R,F,D,N,l,y,t,L,z,B,S,A,p,c,n,T,g)z,t,p,T,S,A,n,L,c,y,g,B={},function(I,b)local a=A(b)local R=function(R,F,D,N,l,n,z)return B(I,{R,F,D,N;l,n;z},b,a)end return R end,function(I,b)local a=A(b)local R=function()return B(I,{},b,a)end return R end,498180-498180,function(I,b)local a=A(b)local R=function(R,F,D,N)return B(I,{R;F;D,N},b,a)end return R end,function(I)for b=737302-737301,#I,942572+-942571 do z[I[b]]=(349392+-349391)+z[I[b]]end if R then local B=R(true)local a=D(B)a[b(-159852-(-202441))],a[b(-889846+932400)],a[b(703133-660584)]=I,L,function()return 477698+-4021450 end return B else return F({},{[b(796603+-754049)]=L,[b(-736537+779126)]=I;[b(-747529+790078)]=function()return-4012350-(-468598)end})end end,{},function(I)local b,B=-209147-(-209148),I[346190-346189]while B do z[B],b=z[B]-(418293+-418292),(72597+-72596)+b if 356367-356367==z[B]then z[B],n[B]=nil,nil end B=I[b]end end,function()T=(963578-963577)+T z[T]=514702-514701 return T end,function(I)z[I]=z[I]-(-788194-(-788195))if z[I]==418394+-418394 then z[I],n[I]=nil,nil end end,function(I,b)local a=A(b)local R=function(...)return B(I,{...},b,a)end return R end,function(B,R,F,D)local f,g,T,h,Q,i,q,W,r,A,U,s,o,G,V,O,Z,C,z,Y,l,k,E,w,j,P,x,e,u,X,L,v,d,J while B do if B<7513346-(-480674)then if B<4258221-820482 then if B<590535+876945 then if B<413737+349602 then if B<532304+14047 then if B<-574981-(-1031374)then if B<-241669+457635 then d=381666+-381665 B=10847592-(-203726)Y=O[d]v=Y else B=3623941-126750 n[T]=l end else l={}B=I[b(-891465-(-934011))]end else if B<313282-(-290137)then T=n[F[579930+-579928]]A=n[F[-804826+804829]]z=T==A l=z B=7262129-(-744244)else A=-691794+691795 T=n[F[-142762-(-142765)]]z=T~=A B=z and-117005+2612120 or 13111957-(-284930)end end else if B<-392603+1630079 then if B<1734759-797717 then B=true B=2877242-(-553405)else B=w l=J B=J and-543491+14781599 or 10332749-354914 end else if B<2227073-846105 then q=not E V=V+C l=V<=h l=q and l q=V>=h q=E and q l=q or l q=17387954-795153 B=l and q l=505385+10410795 B=B or l else l=b(-686267-(-728827))B=I[l]z=b(790893+-748334)l=I[z]z=b(-575371-(-617930))I[z]=B z=b(-424625-(-467185))I[z]=l z=n[F[-388436+388437]]T=z()B=12474966-(-675670)end end end else if B<747664+2230852 then if B<3276616-833781 then if B<2926743-835080 then if B<1978517-202443 then Z=P s=Z G[Z]=s B=684411+13959366 Z=nil else Y=n[T]v=Y B=Y and-73546-(-289143)or-465112+11516430 end else r=l U=b(-968442+1010994)W=b(-870408+912992)l=I[W]W=b(-682011-(-724569))B=l[W]W=c()n[W]=B l=I[U]U=b(402386+-359821)X=b(583083-540531)B=l[U]i=I[X]J=i w=B U=B B=i and 8626284-(-376533)or 2034370-954618 end else if B<-904615+3799705 then J=-111772+111774 A=475625-475593 T=n[F[-449431+449434]]z=T%A i=203595-203582 L=n[F[-749287-(-749291)]]W=n[F[-377759+377761]]Z=n[F[-69025-(-69028)]]G=Z-z Z=-709038-(-709070)X=G/Z w=i-X U=J^w r=W/U g=L(r)L=4295789183-821887 A=g%L g=274095-274093 L=g^z B=4371962-(-324836)T=A/L i=64001-63745 U=823819+-823818 L=n[F[-93944-(-93948)]]W=T%U U=4295626853-659557 r=W*U g=L(r)W=-401475+467011 L=n[F[538184-538180]]r=L(T)A=g+r g=165925+-100389 L=A%g T=nil r=A-L g=r/W W=66614-66358 J=-334110-(-334366)r=L%W U=L-r W=U/J J=375505+-375249 z=nil A=nil U=g%J w=g-U J=w/i g=nil w={r;W,U,J}L=nil W=nil n[F[271182+-271181]]=w U=nil J=nil r=nil else Y=B e=723043+-723042 o=O[e]e=false d=o==e v=d B=d and 16607215-1018392 or 11210802-(-735328)end end else if B<3079112-(-295687)then if B<3494472-234253 then T=n[F[382579+-382577]]A=246534-246505 z=T*A T=27335303976341-(-7202)l=z+T z=777075+35184371311757 B=l%z T=315602+-315601 n[F[362803-362801]]=B z=n[F[-321845+321848]]l=z~=T B=13297516-(-99371)else l={}B=I[b(-101262+143850)]P=c()Z={}j=b(424548-382000)n[P]=Z U=nil d=nil q=c()i=nil E=p(7387782-(-735320),{P,J;w,g})Z=c()Q=b(590620-548031)n[Z]=E E={}n[q]=E L=nil s={}O=b(807432+-764846)E=I[j]G=nil r=nil f=n[q]x={[Q]=f;[O]=d}j=E(s,x)E=t(119943+15735234,{q;P,X;J,w;Z})i=895071+35063088306024 g=y(g)A=j X=y(X)q=y(q)T=E J=y(J)w=y(w)Z=y(Z)P=y(P)g=b(-710265+752841)L=I[g]W=nil w=b(-877477-(-920055))W=b(-911187-(-953750))r=I[W]J=T(w,i)U=A[J]J=b(-864725+907276)J=r[J]W={J(r,U)}g=L(a(W))L=g()T=nil A=nil end else if B<4245642-857973 then E=b(-20995+63555)B=I[E]E=b(443179+-400620)I[E]=B B=6146262-(-30350)else B=S(16158428-(-243249),{L})h={B()}l={a(h)}B=I[b(7138+35439)]end end end end else if B<5899182-557821 then if B<-98390+4663548 then if B<4407093-353560 then if B<-688080+4379979 then if B<367270+3117324 then z=R T=c()B=true n[T]=B A=b(952781-910199)l=I[A]A=b(-602491+645046)B=l[A]A=c()L=c()g=c()n[A]=B B=p(-303553+8295825,{})n[L]=B W=b(441394+-398803)B=false n[g]=B U=S(849953+14902508,{g})r=I[W]W=r(U)B=W and 5745474-579524 or 1688788-(-706720)l=W else B=-745581+2051196 O=nil x=y(x)j=y(j)q=y(q)Q=y(Q)f=y(f)s=y(s)end else B=n[F[480213+-480206]]B=B and 12031118-930500 or 13713347-935029 end else if B<3713955-(-439956)then P=#G E=224613+-224613 Z=P==E B=Z and-246116+3518017 or 473970+12920655 else v=n[T]l=v B=v and 1929244-(-980257)or 505928+-96643 end end else if B<3919745-(-981009)then if B<5069514-395874 then B=true B=B and-849294+15178190 or 952422-417857 else A=b(496787+-454235)T=I[A]A=b(-723802+766349)z=T[A]A=n[F[-887211+887212]]T={z(A)}l={a(T)}B=I[b(-422594-(-465181))]end else if B<5830345-744243 then B=6423242-(-629177)else r=n[g]l=r B=705539+1689969 end end end else if B<6012271-(-665624)then if B<6993690-550588 then if B<6144934-(-111210)then if B<933621+5304554 then B=5311213-715758 else T=b(152853+-110289)l=6324325-(-335510)A=16323010-425817 z=T^A B=l-z z=B l=b(308239+-265654)B=l/z l={B}B=I[b(433384+-390794)]end else W=not r A=A+g T=A<=L T=W and T W=A>=L W=r and W T=W or T W=12855118-(-300327)B=T and W T=10790000-(-835057)B=B or T end else if B<-966822+7488835 then E=-880575+880575 P=#G B=14243581-848956 Z=P==E else B=-217749+15712857 h=i==X V=h end end else if B<-160275+7111923 then if B<-271398+6983739 then U=b(-844220-(-886802))B={}n[F[-264299+264301]]=B g=35184371277127-(-811705)l=n[F[-206877-(-206880)]]L=l W=55225+-54970 l=T%g n[F[161501+-161497]]=l r=T%W W=556130-556128 g=r+W n[F[480359-480354]]=g W=I[U]U=b(-82840-(-125406))r=W[U]B=9742631-(-131497)W=r(z)r=b(-734376-(-776944))U=555369-555368 A[T]=r r=541780-541752 w=173812+-173811 J=W i=w w=-580624-(-580624)X=i<w w=U-i else T=n[F[-177636-(-177637)]]g=494579-494577 L=802352+-802351 A=T(L,g)T=43732+-43731 z=A==T l=z B=z and 473667+7532706 or-446188-(-1001334)end else if B<-454577+7854706 then g=y(g)W=y(W)r=nil U=nil T=y(T)W=b(534760-492176)J=y(J)w=y(w)P=y(P)Z=nil G=nil i=nil w=c()X=nil A=y(A)r=b(-789099-(-831683))J=b(856943-814361)B=1002994+13640783 g=I[r]A=nil T=nil r=b(424036+-381469)L=y(L)L=g[r]g=c()n[g]=L r=I[W]U=b(79953+-37401)G={}W=b(175830-133272)L=r[W]W=I[U]U=b(-542269-(-584816))r=W[U]U=I[J]P=1038569-1038313 i={}J=b(592152-549595)W=U[J]J=c()E=P U=348142-348142 n[J]=U U=-813670+813672 Z=-858565-(-858566)n[w]=U U={}X=c()n[X]=i i=118279+-118279 P=-998496-(-998497)q=P P=-203292+203292 j=q<P P=Z-q else l=b(-729173+771744)B=I[l]z=b(598522+-555966)l=B(z)B=I[b(757107+-714534)]l={}end end end end end else if B<334773+12715394 then if B<-820142+11736813 then if B<9679129-(-258216)then if B<7972460-(-687349)then if B<372061+7859463 then if B<-810033+8825587 then B=l and 13230341-(-444418)or 4010689-308461 else z=n[F[-939194+939195]]l=#z z=154963-154963 B=l==z B=B and-386936+3591870 or-789330+5486128 end else l={T}B=I[b(-1047060+1089610)]end else if B<9130493-(-449194)then G=b(1084817-1042265)X=I[G]G=b(-798856-(-841417))i=X[G]J=i B=-817839+1897591 else G=not X w=w+i U=w<=J U=G and U G=w>=J G=X and G U=G or U G=611609+12583825 B=U and G U=10986188-647043 B=B or U end end else if B<10285694-(-231362)then if B<9171960-(-994496)then w=b(-459858-(-502419))J=I[w]B=860038+13378070 l=J else W=nil r=nil B=7792765-(-609898)L=nil end else if B<10759083-40358 then B=I[b(-107785-(-150360))]l={}else h=n[T]V=h B=h and 429427+6101563 or 16240958-745850 end end end else if B<-621909+12512875 then if B<-330458+11542374 then if B<-575999+11641770 then if B<947164+10089662 then C=b(1082682-1040110)B=I[C]q=b(781544+-738985)E=I[q]C=B(E)B=b(943429+-900869)I[B]=C B=6181034-4422 else k=-944643+944644 n[T]=v e=n[x]o=e+k d=O[o]Y=i+d d=97087+-96831 B=Y%d i=B B=3324009-(-173182)o=n[s]d=X+o o=-243511-(-243767)Y=d%o X=Y end else z=b(-212765-(-255336))B=I[z]A=-810524-(-810524)T=n[F[983177+-983169]]z=B(T,A)B=11763765-(-1014553)end else if B<-198538+11718203 then A=n[F[371392+-371386]]B=137260+15142250 T=A==z l=T else B=n[F[-663798+663808]]T=n[F[777015-777004]]z[B]=T B=n[F[-651487-(-651499)]]T={B(z)}B=I[b(-736723+779306)]l={a(T)}end end else if B<-913284+13454118 then if B<-219711+12553206 then l=v B=Y B=64303-(-344982)else B=4948837-353382 end else if B<13136696-368967 then B=true B=B and-634508+13113957 or-321643+3752290 else T=336741-336740 B={}A=n[F[106348+-106339]]z=B L=A A=173237-173236 B=7237946-872277 g=A A=611504+-611504 r=g<A A=T-g end end end end else if B<14719141-423143 then if B<12553560-(-842257)then if B<-103265+13277350 then if B<12500128-(-662223)then if B<-536828+13690146 then B=true B=B and 1025360-(-440893)or 9850171-(-695136)else U=-379869+379869 J=-42548+42803 T=A B=n[F[57679-57678]]W=B(U,J)z[T]=W B=6270256-(-95413)T=nil end else A=1041748+-926752 l=8431775-(-816058)T=b(-818768-(-861349))z=T^A B=l-z z=B l=b(832082+-789502)B=l/z l={B}B=I[b(-707217-(-749796))]end else if B<12912768-(-462468)then U=w B=10804687-930559 C=b(-979736-(-1022318))h=I[C]C=b(-648672-(-691264))V=h[C]h=V(z,U)V=n[F[-25905+25911]]C=V()P=h+C Z=P+r P=-643901+644157 G=Z%P r=G P=A[T]C=965186-965185 h=r+C U=nil V=L[h]Z=P..V A[T]=Z else P=-737251+737252 E=#G Z=L(P,E)B=569418+3543268 P=r(G,Z)s=167473-167472 E=n[X]j=P-s Z=nil q=W(j)E[P]=q P=nil end end else if B<-381659+14058717 then if B<13916090-331279 then T=n[F[-392067+392070]]A=201757-201656 B=984317+-227704 z=T*A T=670415+-670158 l=z%T n[F[-201251-(-201254)]]=l else l=b(582878-540308)B=I[l]z=n[F[123276-123272]]J=S(13673681-501357,{})L=b(-304296+346868)U=b(180367-137776)A=I[L]W=I[U]U={W(J)}W=637552-637550 r={a(U)}g=r[W]L=A(g)A=b(90910-48357)T=z(L,A)z={T()}l=B(a(z))T=n[F[-202997+203002]]B=T and 234765+11127312 or-430984+15710494 z=l l=T end else if B<13231512-(-930718)then B=155434+8247229 else J=c()G=b(-922277-(-964868))w=-1034104+1034107 n[J]=l B=n[W]i=-497400-(-497465)Z=p(6650304-408916,{})l=B(w,i)w=c()B=741655-741655 n[w]=l i=B B=490964+-490964 l=I[G]G={l(Z)}X=B B={a(G)}G=B l=-34249-(-34251)B=G[l]l=b(68133+-25563)Z=B C=b(902279-859707)B=I[l]P=n[A]h=I[C]C=h(Z)h=b(474690+-432137)V=P(C,h)P={V()}l=B(a(P))B=446652-(-858963)P=c()n[P]=l l=-533254-(-533255)V=n[w]h=V V=-664407-(-664408)C=V V=248528+-248528 E=C<V V=l-C end end end else if B<-1024212+16751516 then if B<536317+14749754 then if B<235924+14962361 then if B<485042+13911939 then B=n[W]E=-456356+456362 C=-1012720+1012721 h=B(C,E)B=b(772668+-730108)E=b(385857-343297)I[B]=h C=I[E]E=-918897-(-918899)B=C>E B=B and 345790+10593665 or 542770+2843002 else s=not j P=P+q Z=P<=E Z=s and Z s=P>=E s=j and s Z=s or Z s=752671-(-718793)B=Z and s Z=152233+6334460 B=B or Z end else B=3732291-30063 n[F[152272-152267]]=l z=nil end else if B<-1028109+16594495 then n[T]=V B=n[T]B=B and 4148349-(-935212)or 537539-(-316853)else e=830923-830921 o=O[e]e=n[f]d=o==e v=d B=11831405-(-114725)end end else if B<-576016+16919390 then if B<274121+15563162 then B=true n[F[-279209+279210]]=B l={}B=I[b(151344-108770)]else B=n[F[-587735-(-587736)]]A=B T=R[805975+-805973]z=R[-354502-(-354503)]B=A[T]B=B and 13511322-(-210415)or-407869+7116610 end else if B<918518+15519291 then B=13354170-203534 else q=c()u=120643+-110643 s=-1008794-(-1008894)n[q]=V k=540675+-540675 j=b(-844802+887386)l=I[j]j=b(-767637+810195)B=l[j]j=-918966+918967 l=B(j,s)j=c()O=533201+-533199 s=-619680-(-619680)n[j]=l x=138563+-138308 B=n[W]l=B(s,x)s=c()n[s]=l B=n[W]Q=n[j]f=25331+-25330 d=b(-461455+504027)x=836928+-836927 l=B(x,Q)x=c()n[x]=l l=n[W]Q=l(f,O)l=502776-502775 B=Q==l Q=c()l=b(862427-819874)O=b(-298130-(-340692))n[Q]=B Y=I[d]o=n[W]e={o(k,u)}d=Y(a(e))Y=b(170781-128219)B=b(-500804+543373)v=d..Y B=Z[B]f=O..v O=b(873803+-831212)B=B(Z,l,f)f=c()n[f]=B v=S(6196308-(-700085),{W;q,w;A;T;P;Q,f,j;x;s,J})l=I[O]O={l(v)}B={a(O)}O=B B=n[Q]B=B and 5156424-992234 or 2611452-761837 end end end end end end end B=#D return a(l)end return(g(-876661+4352328,{}))(a(l))end)(getfenv and getfenv()or _ENV,unpack or table[b(227358-184797)],newproxy,setmetatable,getmetatable,select,{...})end)(...)
+-- Isme Joiner Script para Roblox - GUI Mejorada con Server Hop Original
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+
+-- Variables
+local player = Players.LocalPlayer
+local joinerActive = false
+local placeId = game.PlaceId
+local attemptCount = 0
+
+-- Lista de usuarios Premium (usa nombres exactos, sensible a mayúsculas)
+local premiumUsers = {
+    "zWEKITO",
+    "raimind7284",
+    "pepeelcrak20021"
+    "jxgnjdxf"
+    -- Agrega más usuarios aquí
+}
+
+-- Debug: imprimir nombre del jugador
+print("Current User:", player.Name)
+
+-- Verificar si el usuario es premium
+local isPremium = false
+for _, username in pairs(premiumUsers) do
+    if player.Name == username then
+        isPremium = true
+        break
+    end
+end
+
+-- Velocidad de búsqueda según edición
+local searchDelay = isPremium and 0.5 or 2
+
+-- Colores según edición
+local primaryColor = isPremium and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(100, 255, 100)
+local secondaryColor = isPremium and Color3.fromRGB(255, 200, 50) or Color3.fromRGB(120, 255, 120)
+local accentColor = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
+
+-- Crear ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "IsmeJoinerGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Frame principal
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 280, 0, 280)
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -140)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Parent = screenGui
+
+-- Animación de entrada desde el centro
+mainFrame.Size = UDim2.new(0, 0, 0, 0)
+mainFrame.BackgroundTransparency = 1
+local openTween = TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 280, 0, 280),
+    BackgroundTransparency = 0
+})
+openTween:Play()
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = mainFrame
+
+-- Sombra del frame
+local shadow = Instance.new("Frame")
+shadow.Name = "Shadow"
+shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+shadow.BackgroundTransparency = 0.7
+shadow.Position = UDim2.new(0, -5, 0, -5)
+shadow.Size = UDim2.new(1, 10, 1, 10)
+shadow.ZIndex = 0
+shadow.Parent = mainFrame
+
+local shadowCorner = Instance.new("UICorner")
+shadowCorner.CornerRadius = UDim.new(0, 10)
+shadowCorner.Parent = shadow
+
+-- Stroke animado
+local stroke = Instance.new("UIStroke")
+stroke.Color = primaryColor
+stroke.Thickness = 2
+stroke.Parent = mainFrame
+
+local strokeGradient = Instance.new("UIGradient")
+if isPremium then
+    strokeGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(218, 165, 32))
+    }
+else
+    strokeGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 200, 80))
+    }
+end
+strokeGradient.Parent = stroke
+
+-- Animación del stroke
+spawn(function()
+    while wait() do
+        for i = 0, 360, 3 do
+            strokeGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
+-- Partículas de fondo animadas
+local particlesFrame = Instance.new("Frame")
+particlesFrame.Size = UDim2.new(1, 0, 1, 0)
+particlesFrame.BackgroundTransparency = 1
+particlesFrame.ClipsDescendants = true
+particlesFrame.ZIndex = 1
+particlesFrame.Parent = mainFrame
+
+-- Crear partículas flotantes
+for i = 1, 8 do
+    local particle = Instance.new("Frame")
+    particle.Size = UDim2.new(0, math.random(2, 4), 0, math.random(2, 4))
+    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    particle.BackgroundColor3 = primaryColor
+    particle.BackgroundTransparency = 0.7
+    particle.BorderSizePixel = 0
+    particle.ZIndex = 1
+    particle.Parent = particlesFrame
+    
+    local particleCorner = Instance.new("UICorner")
+    particleCorner.CornerRadius = UDim.new(1, 0)
+    particleCorner.Parent = particle
+    
+    -- Animación flotante
+    spawn(function()
+        while wait() do
+            local randomX = math.random()
+            local randomY = math.random()
+            local floatTween = TweenService:Create(particle, TweenInfo.new(math.random(3, 6), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                Position = UDim2.new(randomX, 0, randomY, 0)
+            })
+            floatTween:Play()
+            floatTween.Completed:Wait()
+        end
+    end)
+end
+
+-- Título
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -20, 0, 30)
+titleLabel.Position = UDim2.new(0, 10, 0, 5)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Isme Joiner [ALPHA]"
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 20
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextTransparency = 1
+titleLabel.ZIndex = 2
+titleLabel.Parent = mainFrame
+
+-- Fade in del título
+TweenService:Create(titleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.3), {
+    TextTransparency = 0
+}):Play()
+
+local textGradient = Instance.new("UIGradient")
+if isPremium then
+    textGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
+    }
+else
+    textGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
+    }
+end
+textGradient.Parent = titleLabel
+
+spawn(function()
+    while wait() do
+        for i = 0, 360, 2 do
+            textGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
+-- Texto de edición
+local editionLabel = Instance.new("TextLabel")
+editionLabel.Size = UDim2.new(1, -20, 0, 18)
+editionLabel.Position = UDim2.new(0, 10, 0, 32)
+editionLabel.BackgroundTransparency = 1
+editionLabel.Text = isPremium and "Edition: Premium ⚡" or "Edition: FreeMium"
+editionLabel.Font = Enum.Font.GothamBold
+editionLabel.TextSize = 12
+editionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+editionLabel.TextTransparency = 1
+editionLabel.ZIndex = 2
+editionLabel.Parent = mainFrame
+
+-- Fade in de la edición
+TweenService:Create(editionLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.4), {
+    TextTransparency = 0
+}):Play()
+
+local editionGradient = Instance.new("UIGradient")
+if isPremium then
+    editionGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
+    }
+else
+    editionGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
+    }
+end
+editionGradient.Parent = editionLabel
+
+spawn(function()
+    while wait() do
+        for i = 0, 360, 2 do
+            editionGradient.Rotation = i
+            wait(0.03)
+        end
+    end
+end)
+
+-- Toggle Frame
+local toggleFrame = Instance.new("Frame")
+toggleFrame.Size = UDim2.new(0, 200, 0, 40)
+toggleFrame.Position = UDim2.new(0.5, -100, 0, 60)
+toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+toggleFrame.BorderSizePixel = 0
+toggleFrame.BackgroundTransparency = 1
+toggleFrame.ZIndex = 2
+toggleFrame.Parent = mainFrame
+
+-- Fade in del toggle frame
+TweenService:Create(toggleFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.5), {
+    BackgroundTransparency = 0
+}):Play()
+
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 8)
+toggleCorner.Parent = toggleFrame
+
+-- Hover effect para toggle frame
+toggleFrame.MouseEnter:Connect(function()
+    TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    }):Play()
+end)
+
+toggleFrame.MouseLeave:Connect(function()
+    TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    }):Play()
+end)
+
+local toggleLabel = Instance.new("TextLabel")
+toggleLabel.Size = UDim2.new(0, 120, 1, 0)
+toggleLabel.Position = UDim2.new(0, 8, 0, 0)
+toggleLabel.BackgroundTransparency = 1
+toggleLabel.Text = "Auto Server Hop:"
+toggleLabel.Font = Enum.Font.Gotham
+toggleLabel.TextSize = 14
+toggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+toggleLabel.ZIndex = 3
+toggleLabel.Parent = toggleFrame
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 55, 0, 26)
+toggleButton.Position = UDim2.new(1, -63, 0.5, -13)
+toggleButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+toggleButton.BorderSizePixel = 0
+toggleButton.Text = "OFF"
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 12
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.ZIndex = 3
+toggleButton.Parent = toggleFrame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 6)
+buttonCorner.Parent = toggleButton
+
+-- Animación de hover para el botón
+toggleButton.MouseEnter:Connect(function()
+    TweenService:Create(toggleButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        Size = UDim2.new(0, 58, 0, 28)
+    }):Play()
+end)
+
+toggleButton.MouseLeave:Connect(function()
+    TweenService:Create(toggleButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        Size = UDim2.new(0, 55, 0, 26)
+    }):Play()
+end)
+
+-- Stats Frame
+local statsFrame = Instance.new("Frame")
+statsFrame.Size = UDim2.new(1, -20, 0, 30)
+statsFrame.Position = UDim2.new(0, 10, 0, 105)
+statsFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+statsFrame.BorderSizePixel = 0
+statsFrame.BackgroundTransparency = 1
+statsFrame.ZIndex = 2
+statsFrame.Parent = mainFrame
+
+-- Fade in del stats frame
+TweenService:Create(statsFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.6), {
+    BackgroundTransparency = 0
+}):Play()
+
+local statsCorner = Instance.new("UICorner")
+statsCorner.CornerRadius = UDim.new(0, 8)
+statsCorner.Parent = statsFrame
+
+local statsLabel = Instance.new("TextLabel")
+statsLabel.Size = UDim2.new(1, -10, 1, 0)
+statsLabel.Position = UDim2.new(0, 5, 0, 0)
+statsLabel.BackgroundTransparency = 1
+statsLabel.Text = "Attempts: 0 | Speed: " .. (isPremium and "⚡ Fast" or "Normal")
+statsLabel.Font = Enum.Font.Gotham
+statsLabel.TextSize = 11
+statsLabel.TextColor3 = primaryColor
+statsLabel.TextXAlignment = Enum.TextXAlignment.Center
+statsLabel.ZIndex = 3
+statsLabel.Parent = statsFrame
+
+-- Pulso en las stats cuando cambian
+local function pulseStats()
+    local pulseTween = TweenService:Create(statsLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
+        TextSize = 13
+    })
+    pulseTween:Play()
+end
+
+-- Botón Free Priv
+local freePrivButton = Instance.new("TextButton")
+freePrivButton.Size = UDim2.new(1, -20, 0, 35)
+freePrivButton.Position = UDim2.new(0, 10, 0, 142)
+freePrivButton.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+freePrivButton.BorderSizePixel = 0
+freePrivButton.Text = "Free Priv"
+freePrivButton.Font = Enum.Font.GothamBold
+freePrivButton.TextSize = 14
+freePrivButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+freePrivButton.BackgroundTransparency = 1
+freePrivButton.ZIndex = 2
+freePrivButton.Parent = mainFrame
+
+-- Fade in del botón Free Priv
+TweenService:Create(freePrivButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.65), {
+    BackgroundTransparency = 0
+}):Play()
+
+local freePrivCorner = Instance.new("UICorner")
+freePrivCorner.CornerRadius = UDim.new(0, 8)
+freePrivCorner.Parent = freePrivButton
+
+-- Hover effect para Free Priv
+freePrivButton.MouseEnter:Connect(function()
+    TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = Color3.fromRGB(45, 45, 55),
+        Size = UDim2.new(1, -18, 0, 37)
+    }):Play()
+end)
+
+freePrivButton.MouseLeave:Connect(function()
+    TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = Color3.fromRGB(35, 35, 45),
+        Size = UDim2.new(1, -20, 0, 35)
+    }):Play()
+end)
+
+-- Frame del log
+local logFrame = Instance.new("Frame")
+logFrame.Size = UDim2.new(1, -20, 0, 75)
+logFrame.Position = UDim2.new(0, 10, 0, 185)
+logFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+logFrame.BorderSizePixel = 0
+logFrame.BackgroundTransparency = 1
+logFrame.ZIndex = 2
+logFrame.Parent = mainFrame
+
+-- Fade in del log frame
+TweenService:Create(logFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.7), {
+    BackgroundTransparency = 0
+}):Play()
+
+local logCorner = Instance.new("UICorner")
+logCorner.CornerRadius = UDim.new(0, 8)
+logCorner.Parent = logFrame
+
+local logTitle = Instance.new("TextLabel")
+logTitle.Size = UDim2.new(1, -10, 0, 18)
+logTitle.Position = UDim2.new(0, 5, 0, 3)
+logTitle.BackgroundTransparency = 1
+logTitle.Text = "System Log:"
+logTitle.Font = Enum.Font.GothamBold
+logTitle.TextSize = 12
+logTitle.TextColor3 = Color3.fromRGB(180, 180, 200)
+logTitle.TextXAlignment = Enum.TextXAlignment.Left
+logTitle.ZIndex = 3
+logTitle.Parent = logFrame
+
+local logLabel = Instance.new("TextLabel")
+logLabel.Size = UDim2.new(1, -10, 1, -22)
+logLabel.Position = UDim2.new(0, 5, 0, 20)
+logLabel.BackgroundTransparency = 1
+logLabel.Text = isPremium and "⚡ Premium Mode Ready\n• Fast search enabled\n• Priority access" or "🌟 FreeMium Mode Ready\n• Standard search\n• Stable connection"
+logLabel.Font = Enum.Font.Code
+logLabel.TextSize = 10
+logLabel.TextColor3 = primaryColor
+logLabel.TextXAlignment = Enum.TextXAlignment.Left
+logLabel.TextYAlignment = Enum.TextYAlignment.Top
+logLabel.TextWrapped = true
+logLabel.ZIndex = 3
+logLabel.Parent = logFrame
+
+-- Función para actualizar el log con animación
+local function updateLog(message)
+    -- Fade out
+    local fadeOut = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
+        TextTransparency = 1
+    })
+    fadeOut:Play()
+    fadeOut.Completed:Wait()
+    
+    -- Cambiar texto
+    logLabel.Text = message
+    
+    -- Fade in
+    local fadeIn = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
+        TextTransparency = 0
+    })
+    fadeIn:Play()
+end
+
+-- Función para actualizar stats con animación
+local function updateStats()
+    statsLabel.Text = string.format("Attempts: %d | Speed: %s", 
+        attemptCount, 
+        isPremium and "⚡ Fast" or "Normal"
+    )
+    pulseStats()
+end
+
+-- Función para buscar servidor vacío (Free Priv)
+local function findEmptyServer()
+    updateLog("🔍 Searching empty server...\nFree Priv Mode")
+    
+    local success, result = pcall(function()
+        local servers = HttpService:JSONDecode(game:HttpGet(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
+        
+        if servers and servers.data then
+            -- Buscar servidor completamente vacío
+            for _, server in pairs(servers.data) do
+                if server.id ~= game.JobId and server.playing == 0 then
+                    updateLog("✅ Empty server found!\nJobId: " .. server.id:sub(1, 8) .. "...\nConnecting...")
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
+                    return true
+                end
+            end
+            
+            -- Si no hay servidor vacío, buscar el más vacío posible
+            local bestServer = nil
+            local minPlayers = 999
+            
+            for _, server in pairs(servers.data) do
+                if server.id ~= game.JobId and server.playing < minPlayers and server.playing < server.maxPlayers then
+                    bestServer = server
+                    minPlayers = server.playing
+                end
+            end
+            
+            if bestServer then
+                updateLog("⚠️ No empty servers\nBest option: " .. bestServer.playing .. " players\nConnecting...")
+                TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
+                return true
+            else
+                updateLog("❌ No available servers\nTry again later")
+                return false
+            end
+        end
+    end)
+    
+    if not success then
+        updateLog("⚠️ Error searching servers\n" .. tostring(result):sub(1, 40))
+    end
+end
+
+-- Función para hacer server hop (ORIGINAL)
+local function serverHop()
+    if not joinerActive then return end
+    
+    attemptCount = attemptCount + 1
+    updateStats()
+    updateLog("Searching servers...\nAttempt #" .. attemptCount .. (isPremium and " (Premium Speed)" or ""))
+    
+    local success, result = pcall(function()
+        local servers = HttpService:JSONDecode(game:HttpGet(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
+        
+        if servers and servers.data then
+            for _, server in pairs(servers.data) do
+                if server.id ~= game.JobId and server.playing < server.maxPlayers then
+                    updateLog("Attempt: JobId\n" .. server.id .. "\nPlayers: " .. server.playing .. "/" .. server.maxPlayers)
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
+                    return
+                end
+            end
+            updateLog("No servers found.\nRetrying..." .. (isPremium and "\n(Premium Speed)" or ""))
+        end
+    end)
+    
+    if not success then
+        updateLog("Error: " .. tostring(result):sub(1, 50) .. "...")
+        wait(1)
+        if joinerActive then
+            serverHop()
+        end
+    end
+end
+
+-- Evento del botón toggle con animación
+toggleButton.MouseButton1Click:Connect(function()
+    joinerActive = not joinerActive
+    
+    -- Animación de click
+    local clickTween = TweenService:Create(toggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
+        Size = UDim2.new(0, 50, 0, 24)
+    })
+    clickTween:Play()
+    
+    if joinerActive then
+        -- Animación de color a ON
+        TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
+        }):Play()
+        toggleButton.Text = "ON"
+        attemptCount = 0
+        updateStats()
+        updateLog("Starting server hop...\n" .. (isPremium and "Premium Mode" or "FreeMium Mode"))
+        
+        -- Pulso en el frame cuando se activa
+        local pulseTween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
+            Size = UDim2.new(0, 285, 0, 285)
+        })
+        pulseTween:Play()
+        
+        spawn(function()
+            while joinerActive do
+                serverHop()
+                wait(searchDelay)
+            end
+        end)
+    else
+        -- Animación de color a OFF
+        TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+        }):Play()
+        toggleButton.Text = "OFF"
+        updateLog("Stopped.")
+    end
+end)
+
+-- Evento del botón Free Priv
+freePrivButton.MouseButton1Click:Connect(function()
+    -- Animación de click
+    local clickTween = TweenService:Create(freePrivButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
+        Size = UDim2.new(1, -25, 0, 32)
+    })
+    clickTween:Play()
+    
+    -- Animación de color
+    local colorTween = TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = primaryColor
+    })
+    colorTween:Play()
+    
+    wait(0.2)
+    
+    -- Volver al color original
+    TweenService:Create(freePrivButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    }):Play()
+    
+    -- Ejecutar búsqueda de servidor vacío
+    findEmptyServer()
+end)
+
+-- Sistema de arrastre mejorado con animaciones
+local dragging = false
+local dragInput, dragStart, startPos
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        
+        -- Animación al empezar a arrastrar
+        TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+            Size = UDim2.new(0, 275, 0, 275)
+        }):Play()
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                -- Animación al soltar
+                TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                    Size = UDim2.new(0, 280, 0, 280)
+                }):Play()
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- Notificación inicial
+print("✅ Isme Joiner v3.2 loaded successfully")
+print("Edition:", isPremium and "Premium" or "FreeMium")
+print("Player:", player.Name)
