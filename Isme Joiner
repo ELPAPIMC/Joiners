@@ -1,4 +1,4 @@
--- Isme Joiner Script para Roblox - GUI Mejorada con Server Hop Original
+-- Isme Joiner Script para Roblox - GUI Mejorada con Server Hop MEJORADO
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
@@ -15,7 +15,7 @@ local attemptCount = 0
 local premiumUsers = {
     "zWEKITO",
     "raimind7284",
-    "pepeelcrak20021"
+    "pepeelcrak20021",
     "jxgnjdxf"
     -- Agrega más usuarios aquí
 }
@@ -506,37 +506,90 @@ local function findEmptyServer()
     end
 end
 
--- Función para hacer server hop (ORIGINAL)
+---
+-- ********************************************
+-- * FUNCIÓN DE SERVER HOP MEJORADA (v3.3)    *
+-- ********************************************
+---
 local function serverHop()
     if not joinerActive then return end
-    
+
     attemptCount = attemptCount + 1
     updateStats()
-    updateLog("Searching servers...\nAttempt #" .. attemptCount .. (isPremium and " (Premium Speed)" or ""))
-    
-    local success, result = pcall(function()
-        local servers = HttpService:JSONDecode(game:HttpGet(
-            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-        ))
+    updateLog(string.format("🔍 Searching servers...\nAttempt #%d%s",
+        attemptCount,
+        isPremium and " (Premium Speed)" or ""
+    ))
+
+    local hasFoundServer = false
+    local cursor = nil
+    -- Premium puede buscar en más páginas para mayor probabilidad
+    local maxPagesToSearch = isPremium and 5 or 3 
+
+    for page = 1, maxPagesToSearch do
+        if hasFoundServer then break end
         
-        if servers and servers.data then
-            for _, server in pairs(servers.data) do
-                if server.id ~= game.JobId and server.playing < server.maxPlayers then
-                    updateLog("Attempt: JobId\n" .. server.id .. "\nPlayers: " .. server.playing .. "/" .. server.maxPlayers)
-                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
+        local success, result = pcall(function()
+            -- Construir la URL con el cursor si existe
+            local url = string.format(
+                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100%s",
+                placeId,
+                cursor and "&cursor=" .. cursor or ""
+            )
+
+            local response = game:HttpGet(url)
+            local servers = HttpService:JSONDecode(response)
+
+            if servers and servers.data then
+                local bestServer = nil
+                local minPlayers = 999
+                
+                -- Buscar el servidor con menos jugadores
+                for _, server in pairs(servers.data) do
+                    -- Ignorar el servidor actual y servidores llenos
+                    if server.id ~= game.JobId and server.playing < server.maxPlayers then
+                        if server.playing < minPlayers then
+                            minPlayers = server.playing
+                            bestServer = server
+                        end
+                    end
+                end
+
+                if bestServer then
+                    updateLog(string.format(
+                        "✅ Server found!\nJobId: %s...\nPlayers: %d/%d (Page %d)",
+                        bestServer.id:sub(1, 8),
+                        bestServer.playing,
+                        bestServer.maxPlayers,
+                        page
+                    ))
+                    TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
+                    hasFoundServer = true 
                     return
+                else
+                    -- No se encontró servidor ideal, pasar a la siguiente página si hay cursor
+                    cursor = servers.nextPageCursor
+                    
+                    if not cursor then
+                        break -- No hay más páginas
+                    end
                 end
             end
-            updateLog("No servers found.\nRetrying..." .. (isPremium and "\n(Premium Speed)" or ""))
+        end)
+
+        if not success then
+            updateLog("⚠️ API Error on page " .. page .. "\n" .. tostring(result):sub(1, 40) .. "...")
+            wait(1) 
+            break 
         end
-    end)
-    
-    if not success then
-        updateLog("Error: " .. tostring(result):sub(1, 50) .. "...")
-        wait(1)
-        if joinerActive then
-            serverHop()
+        
+        if not hasFoundServer and cursor then
+            wait(searchDelay * 0.5) -- Pausa antes de la siguiente página
         end
+    end
+
+    if not hasFoundServer then
+        updateLog("❌ No available servers found.\nRetrying in " .. searchDelay .. "s...")
     end
 end
 
@@ -607,6 +660,22 @@ freePrivButton.MouseButton1Click:Connect(function()
     findEmptyServer()
 end)
 
+---
+## 🛡️ Manejo de Errores de Teletransporte
+---
+
+-- Conectar al evento de fallo de teletransporte para reintento automático
+TeleportService.TeleportInitFailed:Connect(function(placeId, reason, message)
+    if joinerActive then
+        updateLog("❗ Teleport Failed:\n" .. message .. "\nRetrying...")
+        wait(1) -- Pequeña pausa antes de reintentar
+        serverHop()
+    else
+        updateLog("❗ Teleport Failed:\n" .. message .. "\nServer Hop is OFF.")
+    end
+end)
+
+
 -- Sistema de arrastre mejorado con animaciones
 local dragging = false
 local dragInput, dragStart, startPos
@@ -647,6 +716,6 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 -- Notificación inicial
-print("✅ Isme Joiner v3.2 loaded successfully")
+print("✅ Isme Joiner v3.3 (Improved) loaded successfully")
 print("Edition:", isPremium and "Premium" or "FreeMium")
 print("Player:", player.Name)
