@@ -1,731 +1,314 @@
--- Isme Joiner Script para Roblox - Sistema de Server Hop Optimizado
-local TweenService = game:GetService("TweenService")
+-- Isme Joiner - Auto Server Hop Script
 local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
-local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
--- Variables
 local player = Players.LocalPlayer
-local joinerActive = false
 local placeId = game.PlaceId
-local attemptCount = 0
-local serverCache = {}
-local lastRequestTime = 0
-local REQUEST_COOLDOWN = 1
+local joinerEnabled = false
 
 -- Lista de usuarios Premium
 local premiumUsers = {
-    "zWEKITO",
-    "raimind7284",
-    "pepeelcrak20021"
+    "Usuario1",
+    "Usuario2",
+    "Usuario3",
+    -- Agrega más usuarios aquí
 }
 
--- Verificar usuario premium
-local isPremium = false
-for _, username in pairs(premiumUsers) do
-    if player.Name == username then
-        isPremium = true
-        break
+-- Verificar si el jugador es premium
+local function isPremium()
+    for _, username in pairs(premiumUsers) do
+        if player.Name == username then
+            return true
+        end
     end
+    return false
 end
 
-local searchDelay = isPremium and 0.5 or 2
-local primaryColor = isPremium and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(100, 255, 100)
-local secondaryColor = isPremium and Color3.fromRGB(255, 200, 50) or Color3.fromRGB(120, 255, 120)
-local accentColor = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
+local isPremiumUser = isPremium()
 
--- Crear ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "IsmeJoinerGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+-- Crear GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "IsmeJoiner"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
 -- Frame principal
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 280, 0, 280)
-mainFrame.Position = UDim2.new(0.5, -140, 0.5, -140)
-mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-mainFrame.BorderSizePixel = 0
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Parent = screenGui
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 240, 0, 130)
+MainFrame.Position = UDim2.new(0.5, -120, 0.5, -65)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundTransparency = 1
+MainFrame.Parent = ScreenGui
 
-mainFrame.Size = UDim2.new(0, 0, 0, 0)
-mainFrame.BackgroundTransparency = 1
-local openTween = TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 280, 0, 280),
-    BackgroundTransparency = 0
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 14)
+UICorner.Parent = MainFrame
+
+-- Animación de entrada
+MainFrame.Position = UDim2.new(0.5, -120, 0.5, -100)
+local introTween = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    BackgroundTransparency = 0,
+    Position = UDim2.new(0.5, -120, 0.5, -65)
 })
-openTween:Play()
+introTween:Play()
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = mainFrame
+-- Título con gradiente animado
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 32)
+TitleLabel.Position = UDim2.new(0, 0, 0, 12)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "Isme Joiner"
+TitleLabel.TextSize = 22
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.TextTransparency = 1
+TitleLabel.Parent = MainFrame
 
-local shadow = Instance.new("Frame")
-shadow.Name = "Shadow"
-shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.7
-shadow.Position = UDim2.new(0, -5, 0, -5)
-shadow.Size = UDim2.new(1, 10, 1, 10)
-shadow.ZIndex = 0
-shadow.Parent = mainFrame
+TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.3), {
+    TextTransparency = 0
+}):Play()
 
-local shadowCorner = Instance.new("UICorner")
-shadowCorner.CornerRadius = UDim.new(0, 10)
-shadowCorner.Parent = shadow
-
-local stroke = Instance.new("UIStroke")
-stroke.Color = primaryColor
-stroke.Thickness = 2
-stroke.Parent = mainFrame
-
-local strokeGradient = Instance.new("UIGradient")
-if isPremium then
-    strokeGradient.Color = ColorSequence.new{
+local TitleGradient = Instance.new("UIGradient")
+if isPremiumUser then
+    TitleGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(218, 165, 32))
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 165, 0))
     }
 else
-    strokeGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 200, 80))
+    TitleGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 150)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 200, 100))
     }
 end
-strokeGradient.Parent = stroke
+TitleGradient.Parent = TitleLabel
 
+-- Animar gradiente
 spawn(function()
     while wait() do
-        for i = 0, 360, 3 do
-            strokeGradient.Rotation = i
+        for i = 0, 360, 2 do
+            TitleGradient.Rotation = i
             wait(0.03)
         end
     end
 end)
 
-local particlesFrame = Instance.new("Frame")
-particlesFrame.Size = UDim2.new(1, 0, 1, 0)
-particlesFrame.BackgroundTransparency = 1
-particlesFrame.ClipsDescendants = true
-particlesFrame.ZIndex = 1
-particlesFrame.Parent = mainFrame
+-- Subtítulo Edition
+local EditionLabel = Instance.new("TextLabel")
+EditionLabel.Size = UDim2.new(1, 0, 0, 16)
+EditionLabel.Position = UDim2.new(0, 0, 0, 44)
+EditionLabel.BackgroundTransparency = 1
+EditionLabel.Text = isPremiumUser and "Edition: Premium" or "FreeMium"
+EditionLabel.TextSize = 11
+EditionLabel.Font = Enum.Font.Gotham
+EditionLabel.TextColor3 = isPremiumUser and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(120, 120, 130)
+EditionLabel.TextTransparency = 1
+EditionLabel.Parent = MainFrame
 
-for i = 1, 8 do
-    local particle = Instance.new("Frame")
-    particle.Size = UDim2.new(0, math.random(2, 4), 0, math.random(2, 4))
-    particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
-    particle.BackgroundColor3 = primaryColor
-    particle.BackgroundTransparency = 0.7
-    particle.BorderSizePixel = 0
-    particle.ZIndex = 1
-    particle.Parent = particlesFrame
+TweenService:Create(EditionLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.4), {
+    TextTransparency = 0
+}):Play()
+
+-- Toggle Button
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0, 200, 0, 40)
+ToggleButton.Position = UDim2.new(0.5, -100, 0, 75)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+ToggleButton.Text = "Joiner: OFF"
+ToggleButton.TextColor3 = Color3.new(1, 1, 1)
+ToggleButton.TextSize = 16
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.BorderSizePixel = 0
+ToggleButton.BackgroundTransparency = 1
+ToggleButton.TextTransparency = 1
+ToggleButton.Parent = MainFrame
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 10)
+ToggleCorner.Parent = ToggleButton
+
+TweenService:Create(ToggleButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.5), {
+    BackgroundTransparency = 0,
+    TextTransparency = 0
+}):Play()
+
+-- Sistema de notificaciones
+local NotificationContainer = Instance.new("Frame")
+NotificationContainer.Size = UDim2.new(0, 300, 1, 0)
+NotificationContainer.Position = UDim2.new(1, -320, 0, 20)
+NotificationContainer.BackgroundTransparency = 1
+NotificationContainer.Parent = ScreenGui
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Padding = UDim.new(0, 10)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Parent = NotificationContainer
+
+local function createNotification(message, duration)
+    local NotifFrame = Instance.new("Frame")
+    NotifFrame.Size = UDim2.new(1, 0, 0, 70)
+    NotifFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    NotifFrame.BorderSizePixel = 0
+    NotifFrame.Position = UDim2.new(0, 300, 0, 0)
+    NotifFrame.Parent = NotificationContainer
     
-    local particleCorner = Instance.new("UICorner")
-    particleCorner.CornerRadius = UDim.new(1, 0)
-    particleCorner.Parent = particle
+    local NotifCorner = Instance.new("UICorner")
+    NotifCorner.CornerRadius = UDim.new(0, 10)
+    NotifCorner.Parent = NotifFrame
     
-    spawn(function()
-        while wait() do
-            local randomX = math.random()
-            local randomY = math.random()
-            local floatTween = TweenService:Create(particle, TweenInfo.new(math.random(3, 6), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                Position = UDim2.new(randomX, 0, randomY, 0)
-            })
-            floatTween:Play()
-            floatTween.Completed:Wait()
-        end
+    local NotifText = Instance.new("TextLabel")
+    NotifText.Size = UDim2.new(1, -20, 0, 35)
+    NotifText.Position = UDim2.new(0, 10, 0, 10)
+    NotifText.BackgroundTransparency = 1
+    NotifText.Text = message
+    NotifText.TextSize = 14
+    NotifText.Font = Enum.Font.Gotham
+    NotifText.TextColor3 = Color3.new(1, 1, 1)
+    NotifText.TextXAlignment = Enum.TextXAlignment.Left
+    NotifText.Parent = NotifFrame
+    
+    -- Contenedor de la barra de progreso
+    local ProgressBG = Instance.new("Frame")
+    ProgressBG.Size = UDim2.new(1, -20, 0, 4)
+    ProgressBG.Position = UDim2.new(0, 10, 1, -14)
+    ProgressBG.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    ProgressBG.BorderSizePixel = 0
+    ProgressBG.Parent = NotifFrame
+    
+    local ProgressCorner = Instance.new("UICorner")
+    ProgressCorner.CornerRadius = UDim.new(1, 0)
+    ProgressCorner.Parent = ProgressBG
+    
+    -- Barra de progreso
+    local ProgressBar = Instance.new("Frame")
+    ProgressBar.Size = UDim2.new(1, 0, 1, 0)
+    ProgressBar.BackgroundColor3 = isPremiumUser and Color3.fromRGB(255, 200, 0) or Color3.fromRGB(80, 220, 120)
+    ProgressBar.BorderSizePixel = 0
+    ProgressBar.Parent = ProgressBG
+    
+    local BarCorner = Instance.new("UICorner")
+    BarCorner.CornerRadius = UDim.new(1, 0)
+    BarCorner.Parent = ProgressBar
+    
+    -- Animación de entrada
+    TweenService:Create(NotifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.new(0, 0, 0, 0)
+    }):Play()
+    
+    -- Animación de la barra
+    local progressTween = TweenService:Create(ProgressBar, TweenInfo.new(duration, Enum.EasingStyle.Linear), {
+        Size = UDim2.new(0, 0, 1, 0)
+    })
+    progressTween:Play()
+    
+    -- Eliminar notificación
+    task.delay(duration, function()
+        local exitTween = TweenService:Create(NotifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+            Position = UDim2.new(0, 300, 0, 0)
+        })
+        exitTween:Play()
+        exitTween.Completed:Wait()
+        NotifFrame:Destroy()
     end)
 end
 
--- Título
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -20, 0, 30)
-titleLabel.Position = UDim2.new(0, 10, 0, 5)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Isme Joiner"
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextSize = 20
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextTransparency = 1
-titleLabel.ZIndex = 2
-titleLabel.Parent = mainFrame
-
-TweenService:Create(titleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.3), {
-    TextTransparency = 0
-}):Play()
-
-local textGradient = Instance.new("UIGradient")
-if isPremium then
-    textGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
-    }
-else
-    textGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
-    }
-end
-textGradient.Parent = titleLabel
-
-spawn(function()
-    while wait() do
-        for i = 0, 360, 2 do
-            textGradient.Rotation = i
-            wait(0.03)
-        end
-    end
-end)
-
--- Texto de edición
-local editionLabel = Instance.new("TextLabel")
-editionLabel.Size = UDim2.new(1, -20, 0, 18)
-editionLabel.Position = UDim2.new(0, 10, 0, 32)
-editionLabel.BackgroundTransparency = 1
-editionLabel.Text = isPremium and "Edition: Premium" or "Edition: FreeMium"
-editionLabel.Font = Enum.Font.GothamBold
-editionLabel.TextSize = 12
-editionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-editionLabel.TextTransparency = 1
-editionLabel.ZIndex = 2
-editionLabel.Parent = mainFrame
-
-TweenService:Create(editionLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.4), {
-    TextTransparency = 0
-}):Play()
-
-local editionGradient = Instance.new("UIGradient")
-if isPremium then
-    editionGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 200, 50)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 0))
-    }
-else
-    editionGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 100)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(120, 255, 120)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 100))
-    }
-end
-editionGradient.Parent = editionLabel
-
-spawn(function()
-    while wait() do
-        for i = 0, 360, 2 do
-            editionGradient.Rotation = i
-            wait(0.03)
-        end
-    end
-end)
-
--- Toggle Frame
-local toggleFrame = Instance.new("Frame")
-toggleFrame.Size = UDim2.new(0, 200, 0, 40)
-toggleFrame.Position = UDim2.new(0.5, -100, 0, 60)
-toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-toggleFrame.BorderSizePixel = 0
-toggleFrame.BackgroundTransparency = 1
-toggleFrame.ZIndex = 2
-toggleFrame.Parent = mainFrame
-
-TweenService:Create(toggleFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.5), {
-    BackgroundTransparency = 0
-}):Play()
-
-local toggleCorner = Instance.new("UICorner")
-toggleCorner.CornerRadius = UDim.new(0, 8)
-toggleCorner.Parent = toggleFrame
-
-toggleFrame.MouseEnter:Connect(function()
-    TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    }):Play()
-end)
-
-toggleFrame.MouseLeave:Connect(function()
-    TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    }):Play()
-end)
-
-local toggleLabel = Instance.new("TextLabel")
-toggleLabel.Size = UDim2.new(0, 120, 1, 0)
-toggleLabel.Position = UDim2.new(0, 8, 0, 0)
-toggleLabel.BackgroundTransparency = 1
-toggleLabel.Text = "Auto Server Hop:"
-toggleLabel.Font = Enum.Font.Gotham
-toggleLabel.TextSize = 14
-toggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-toggleLabel.ZIndex = 3
-toggleLabel.Parent = toggleFrame
-
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 55, 0, 26)
-toggleButton.Position = UDim2.new(1, -63, 0.5, -13)
-toggleButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-toggleButton.BorderSizePixel = 0
-toggleButton.Text = "OFF"
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 12
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.ZIndex = 3
-toggleButton.Parent = toggleFrame
-
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 6)
-buttonCorner.Parent = toggleButton
-
-toggleButton.MouseEnter:Connect(function()
-    TweenService:Create(toggleButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        Size = UDim2.new(0, 58, 0, 28)
-    }):Play()
-end)
-
-toggleButton.MouseLeave:Connect(function()
-    TweenService:Create(toggleButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        Size = UDim2.new(0, 55, 0, 26)
-    }):Play()
-end)
-
--- Stats Frame
-local statsFrame = Instance.new("Frame")
-statsFrame.Size = UDim2.new(1, -20, 0, 30)
-statsFrame.Position = UDim2.new(0, 10, 0, 105)
-statsFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-statsFrame.BorderSizePixel = 0
-statsFrame.BackgroundTransparency = 1
-statsFrame.ZIndex = 2
-statsFrame.Parent = mainFrame
-
-TweenService:Create(statsFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.6), {
-    BackgroundTransparency = 0
-}):Play()
-
-local statsCorner = Instance.new("UICorner")
-statsCorner.CornerRadius = UDim.new(0, 8)
-statsCorner.Parent = statsFrame
-
-local statsLabel = Instance.new("TextLabel")
-statsLabel.Size = UDim2.new(1, -10, 1, 0)
-statsLabel.Position = UDim2.new(0, 5, 0, 0)
-statsLabel.BackgroundTransparency = 1
-statsLabel.Text = "Attempts: 0 | Speed: " .. (isPremium and "Fast" or "Normal")
-statsLabel.Font = Enum.Font.Gotham
-statsLabel.TextSize = 11
-statsLabel.TextColor3 = primaryColor
-statsLabel.TextXAlignment = Enum.TextXAlignment.Center
-statsLabel.ZIndex = 3
-statsLabel.Parent = statsFrame
-
-local function pulseStats()
-    local pulseTween = TweenService:Create(statsLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
-        TextSize = 13
-    })
-    pulseTween:Play()
-end
-
--- Botón Free Priv
-local freePrivButton = Instance.new("TextButton")
-freePrivButton.Size = UDim2.new(1, -20, 0, 35)
-freePrivButton.Position = UDim2.new(0, 10, 0, 142)
-freePrivButton.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-freePrivButton.BorderSizePixel = 0
-freePrivButton.Text = "Free Priv"
-freePrivButton.Font = Enum.Font.GothamBold
-freePrivButton.TextSize = 14
-freePrivButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-freePrivButton.BackgroundTransparency = 1
-freePrivButton.ZIndex = 2
-freePrivButton.Parent = mainFrame
-
-TweenService:Create(freePrivButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.65), {
-    BackgroundTransparency = 0
-}):Play()
-
-local freePrivCorner = Instance.new("UICorner")
-freePrivCorner.CornerRadius = UDim.new(0, 8)
-freePrivCorner.Parent = freePrivButton
-
-freePrivButton.MouseEnter:Connect(function()
-    TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = Color3.fromRGB(45, 45, 55),
-        Size = UDim2.new(1, -18, 0, 37)
-    }):Play()
-end)
-
-freePrivButton.MouseLeave:Connect(function()
-    TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = Color3.fromRGB(35, 35, 45),
-        Size = UDim2.new(1, -20, 0, 35)
-    }):Play()
-end)
-
--- Frame del log
-local logFrame = Instance.new("Frame")
-logFrame.Size = UDim2.new(1, -20, 0, 75)
-logFrame.Position = UDim2.new(0, 10, 0, 185)
-logFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
-logFrame.BorderSizePixel = 0
-logFrame.BackgroundTransparency = 1
-logFrame.ZIndex = 2
-logFrame.Parent = mainFrame
-
-TweenService:Create(logFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.7), {
-    BackgroundTransparency = 0
-}):Play()
-
-local logCorner = Instance.new("UICorner")
-logCorner.CornerRadius = UDim.new(0, 8)
-logCorner.Parent = logFrame
-
-local logTitle = Instance.new("TextLabel")
-logTitle.Size = UDim2.new(1, -10, 0, 18)
-logTitle.Position = UDim2.new(0, 5, 0, 3)
-logTitle.BackgroundTransparency = 1
-logTitle.Text = "System Log:"
-logTitle.Font = Enum.Font.GothamBold
-logTitle.TextSize = 12
-logTitle.TextColor3 = Color3.fromRGB(180, 180, 200)
-logTitle.TextXAlignment = Enum.TextXAlignment.Left
-logTitle.ZIndex = 3
-logTitle.Parent = logFrame
-
-local logLabel = Instance.new("TextLabel")
-logLabel.Size = UDim2.new(1, -10, 1, -22)
-logLabel.Position = UDim2.new(0, 5, 0, 20)
-logLabel.BackgroundTransparency = 1
-logLabel.Text = isPremium and "Premium Mode Ready\nFast search enabled\nPriority access" or "FreeMium Mode Ready\nStandard search\nStable connection"
-logLabel.Font = Enum.Font.Code
-logLabel.TextSize = 10
-logLabel.TextColor3 = primaryColor
-logLabel.TextXAlignment = Enum.TextXAlignment.Left
-logLabel.TextYAlignment = Enum.TextYAlignment.Top
-logLabel.TextWrapped = true
-logLabel.ZIndex = 3
-logLabel.Parent = logFrame
-
--- Función para actualizar el log
-local function updateLog(message)
-    local fadeOut = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
-        TextTransparency = 1
-    })
-    fadeOut:Play()
-    fadeOut.Completed:Wait()
+-- Función para buscar servidor
+local function serverHop()
+    if not joinerEnabled then return end
     
-    logLabel.Text = message
-    
-    local fadeIn = TweenService:Create(logLabel, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
-        TextTransparency = 0
-    })
-    fadeIn:Play()
-end
-
--- Función para actualizar stats
-local function updateStats()
-    statsLabel.Text = string.format("Attempts: %d | Speed: %s", 
-        attemptCount, 
-        isPremium and "Fast" or "Normal"
-    )
-    pulseStats()
-end
-
--- Función para obtener servidores con rate limiting
-local function getServers(cursor)
-    local currentTime = tick()
-    local timeSinceLastRequest = currentTime - lastRequestTime
-    
-    if timeSinceLastRequest < REQUEST_COOLDOWN then
-        wait(REQUEST_COOLDOWN - timeSinceLastRequest)
-    end
-    
-    lastRequestTime = tick()
-    
-    local url = string.format(
-        "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100",
-        placeId
-    )
-    
-    if cursor and cursor ~= "" then
-        url = url .. "&cursor=" .. cursor
-    end
+    createNotification("🔍 Buscando servidor...", 3)
     
     local success, result = pcall(function()
-        return HttpService:JSONDecode(game:HttpGet(url))
-    end)
-    
-    if success then
-        return result
-    else
-        return nil, result
-    end
-end
-
--- Función para buscar servidor vacío (Free Priv)
-local function findEmptyServer()
-    updateLog("Free Priv Mode\nSearching empty server...")
-    
-    local maxPages = 3
-    local currentPage = 0
-    local cursor = ""
-    
-    while currentPage < maxPages do
-        local servers, error = getServers(cursor)
+        local servers = HttpService:JSONDecode(game:HttpGet(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
         
-        if not servers then
-            if error and (tostring(error):find("429") or tostring(error):find("limit")) then
-                updateLog("Rate limited\nWaiting 10 seconds...")
-                wait(10)
-                return
-            else
-                updateLog("Connection error\nRetrying...")
-                wait(2)
-                return
-            end
-        end
-        
-        if servers.data then
+        if servers and servers.data then
             for _, server in pairs(servers.data) do
-                if server.id ~= game.JobId and server.playing == 0 then
-                    updateLog(string.format(
-                        "Empty server found\nPlayers: 0/%d\nConnecting...",
-                        server.maxPlayers
-                    ))
-                    wait(0.5)
+                if server.id ~= game.JobId and server.playing < server.maxPlayers then
+                    createNotification("✅ Servidor encontrado! Conectando...", 2)
                     TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
                     return
                 end
             end
-            
-            if servers.nextPageCursor then
-                cursor = servers.nextPageCursor
-                currentPage = currentPage + 1
-                updateLog(string.format("Checking page %d...", currentPage + 1))
-                wait(0.3)
-            else
-                break
-            end
-        else
-            break
         end
-    end
+    end)
     
-    -- Buscar servidor con menos jugadores
-    updateLog("No empty servers\nFinding best option...")
-    wait(0.5)
-    
-    local servers = getServers("")
-    if servers and servers.data then
-        local bestServer = nil
-        local minPlayers = 999
-        
-        for _, server in pairs(servers.data) do
-            if server.id ~= game.JobId and server.playing < minPlayers and server.playing < server.maxPlayers then
-                bestServer = server
-                minPlayers = server.playing
-            end
-        end
-        
-        if bestServer then
-            local playerRatio = math.floor((bestServer.playing / bestServer.maxPlayers) * 100)
-            updateLog(string.format(
-                "Best server found\nPlayers: %d/%d (%d%%)\nConnecting...",
-                bestServer.playing,
-                bestServer.maxPlayers,
-                playerRatio
-            ))
-            wait(0.5)
-            TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
-        else
-            updateLog("No available servers\nTry again later")
+    if not success then
+        createNotification("⚠️ Error. Reintentando...", 4)
+        wait(5)
+        if joinerEnabled then
+            serverHop()
         end
     end
 end
 
--- Función mejorada de server hop
-local function serverHop()
-    if not joinerActive then return false end
+-- Toggle functionality
+ToggleButton.MouseButton1Click:Connect(function()
+    joinerEnabled = not joinerEnabled
     
-    attemptCount = attemptCount + 1
-    updateStats()
-    updateLog(string.format("Searching servers...\nAttempt #%d", attemptCount))
-    
-    local servers, error = getServers("")
-    
-    if not servers then
-        if error and (tostring(error):find("429") or tostring(error):find("limit")) then
-            updateLog("Rate limited\nWaiting 5 seconds...")
-            wait(5)
-            return false
-        elseif error and tostring(error):find("HTTP") then
-            updateLog("Connection error\nRetrying...")
-            wait(2)
-            return false
-        else
-            updateLog("Error occurred\nRetrying...")
-            wait(1)
-            return false
-        end
-    end
-    
-    if servers and servers.data then
-        local availableServers = {}
-        
-        for _, server in pairs(servers.data) do
-            if server.id ~= game.JobId and 
-               server.playing < server.maxPlayers and 
-               not serverCache[server.id] then
-                table.insert(availableServers, server)
-            end
-        end
-        
-        if #availableServers > 0 then
-            table.sort(availableServers, function(a, b)
-                if a.playing ~= b.playing then
-                    return a.playing < b.playing
-                end
-                return a.maxPlayers > b.maxPlayers
-            end)
-            
-            local bestServer = availableServers[1]
-            serverCache[bestServer.id] = true
-            
-            local cacheCount = 0
-            for _ in pairs(serverCache) do cacheCount = cacheCount + 1 end
-            if cacheCount > 50 then
-                serverCache = {}
-            end
-            
-            local playerRatio = math.floor((bestServer.playing / bestServer.maxPlayers) * 100)
-            updateLog(string.format(
-                "Server found\nPlayers: %d/%d (%d%%)\nConnecting...",
-                bestServer.playing,
-                bestServer.maxPlayers,
-                playerRatio
-            ))
-            
-            wait(0.5)
-            TeleportService:TeleportToPlaceInstance(placeId, bestServer.id, player)
-            return true
-        else
-            if #servers.data > 0 then
-                updateLog("All servers attempted\nClearing cache...\nRetrying...")
-                serverCache = {}
-            else
-                updateLog("No servers available\nWaiting...")
-            end
-            return false
-        end
-    else
-        updateLog("No server data\nRetrying...")
-        return false
-    end
-end
-
--- Evento del botón toggle
-toggleButton.MouseButton1Click:Connect(function()
-    joinerActive = not joinerActive
-    
-    local clickTween = TweenService:Create(toggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
-        Size = UDim2.new(0, 50, 0, 24)
+    -- Animación del botón
+    local scaleTween = TweenService:Create(ToggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 190, 0, 38)
     })
-    clickTween:Play()
+    scaleTween:Play()
+    scaleTween.Completed:Wait()
     
-    if joinerActive then
-        TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = isPremium and Color3.fromRGB(218, 165, 32) or Color3.fromRGB(80, 200, 80)
-        }):Play()
-        toggleButton.Text = "ON"
-        attemptCount = 0
-        serverCache = {}
-        updateStats()
-        updateLog(string.format(
-            "Starting server hop\n%s\nReady to search",
-            isPremium and "Premium Mode" or "FreeMium Mode"
-        ))
-        
-        local pulseTween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
-            Size = UDim2.new(0, 285, 0, 285)
-        })
-        pulseTween:Play()
-        
-        spawn(function()
-            while joinerActive do
-                local success = serverHop()
-                if not success then
-                    wait(searchDelay + 1)
-                else
-                    wait(searchDelay)
-                end
-            end
-        end)
-    else
-        TweenService:Create(toggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        }):Play()
-        toggleButton.Text = "OFF"
-        updateLog(string.format(
-            "Stopped\nTotal attempts: %d\nReady for next search",
-            attemptCount
-        ))
-    end
-end)
-
--- Evento del botón Free Priv
-freePrivButton.MouseButton1Click:Connect(function()
-    local clickTween = TweenService:Create(freePrivButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
-        Size = UDim2.new(1, -25, 0, 32)
-    })
-    clickTween:Play()
-    
-    local colorTween = TweenService:Create(freePrivButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = primaryColor
-    })
-    colorTween:Play()
-    
-    wait(0.2)
-    
-    TweenService:Create(freePrivButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-        BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    TweenService:Create(ToggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 200, 0, 40)
     }):Play()
     
-    findEmptyServer()
-end)
-
--- Sistema de arrastre
-local dragging = false
-local dragInput, dragStart, startPos
-
-mainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-        
-        TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-            Size = UDim2.new(0, 275, 0, 275)
+    if joinerEnabled then
+        TweenService:Create(ToggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = Color3.fromRGB(50, 200, 80)
         }):Play()
-        
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-                TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                    Size = UDim2.new(0, 280, 0, 280)
-                }):Play()
-            end
-        end)
+        ToggleButton.Text = "Joiner: ON"
+        createNotification("🚀 Joiner activado", 2)
+        serverHop()
+    else
+        TweenService:Create(ToggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+        }):Play()
+        ToggleButton.Text = "Joiner: OFF"
+        createNotification("🛑 Joiner desactivado", 2)
     end
 end)
 
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+-- Hacer draggable
+local dragging, dragInput, dragStart, startPos
+
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        
+        TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+            Size = UDim2.new(0, 235, 0, 128)
+        }):Play()
+    end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+MainFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+        TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+            Size = UDim2.new(0, 240, 0, 130)
+        }):Play()
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
         local delta = input.Position - dragStart
-        mainFrame.Position = UDim2.new(
+        MainFrame.Position = UDim2.new(
             startPos.X.Scale,
             startPos.X.Offset + delta.X,
             startPos.Y.Scale,
@@ -734,6 +317,10 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-print("Isme Joiner v2.0 loaded")
-print("Edition:", isPremium and "Premium" or "FreeMium")
-print("Player:", player.Name)
+-- Notificación de bienvenida
+wait(0.6)
+if isPremiumUser then
+    createNotification("👑 Welcome, Premium User!", 3)
+else
+    createNotification("👋 Welcome, to Isme Joiner", 3)
+end
