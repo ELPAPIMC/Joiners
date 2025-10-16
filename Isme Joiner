@@ -1,326 +1,397 @@
--- Isme Joiner - Auto Server Hop Script
+-- Isme Joiner Script
+-- Creado con interfaz minimalista y sistema de ediciones
+
+local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
-
-local player = Players.LocalPlayer
-local placeId = game.PlaceId
-local joinerEnabled = false
+local LocalPlayer = Players.LocalPlayer
 
 -- Lista de usuarios Premium
-local premiumUsers = {
-    "Usuario1",
-    "Usuario2",
-    "Usuario3",
-    -- Agrega más usuarios aquí
+local PremiumUsers = {
+    "zWEKITO",
+    -- Agrega más nombres de usuario aquí
 }
 
--- Verificar si el jugador es premium
+-- Verificar si el usuario es Premium
 local function isPremium()
-    for _, username in pairs(premiumUsers) do
-        if player.Name == username then
+    for _, username in ipairs(PremiumUsers) do
+        if LocalPlayer.Name == username then
             return true
         end
     end
     return false
 end
 
-local isPremiumUser = isPremium()
+local Edition = isPremium() and "Premium" or "FreeMium"
+local EditionColor = isPremium() and Color3.fromRGB(147, 51, 234) or Color3.fromRGB(34, 197, 94)
+local AccentColor = isPremium() and Color3.fromRGB(168, 85, 247) or Color3.fromRGB(74, 222, 128)
 
--- Crear GUI
+-- Variables de estado
+local JoinerActive = false
+local ServerHopping = false
+
+-- Crear ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "IsmeJoiner"
 ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = player:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
--- Frame principal
+-- Frame Principal
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 240, 0, 130)
-MainFrame.Position = UDim2.new(0.5, -120, 0.5, -65)
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 320, 0, 240)
+MainFrame.Position = UDim2.new(0.5, -160, 0.5, -120)
+MainFrame.BackgroundColor3 = Color3.fromRGB(17, 17, 27)
 MainFrame.BorderSizePixel = 0
-MainFrame.BackgroundTransparency = 1
 MainFrame.Parent = ScreenGui
 
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 14)
-UICorner.Parent = MainFrame
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 16)
+MainCorner.Parent = MainFrame
 
--- Animación de entrada
-MainFrame.Position = UDim2.new(0.5, -120, 0.5, -100)
-local introTween = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    BackgroundTransparency = 0,
-    Position = UDim2.new(0.5, -120, 0.5, -65)
-})
-introTween:Play()
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = EditionColor
+MainStroke.Thickness = 2
+MainStroke.Transparency = 0.5
+MainStroke.Parent = MainFrame
 
--- Título con gradiente animado
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Size = UDim2.new(1, 0, 0, 32)
-TitleLabel.Position = UDim2.new(0, 0, 0, 12)
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "Isme Joiner"
-TitleLabel.TextSize = 22
-TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.TextTransparency = 1
-TitleLabel.Parent = MainFrame
-
-TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.3), {
-    TextTransparency = 0
-}):Play()
-
-local TitleGradient = Instance.new("UIGradient")
-if isPremiumUser then
-    TitleGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 165, 0))
-    }
-else
-    TitleGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 255, 150)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 200, 100))
-    }
+-- Animación del borde principal
+local function animateBorderGlow(stroke)
+    local tween1 = TweenService:Create(stroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+        Transparency = 0
+    })
+    tween1:Play()
 end
-TitleGradient.Parent = TitleLabel
 
--- Animar gradiente
-spawn(function()
-    while wait() do
-        for i = 0, 360, 2 do
-            TitleGradient.Rotation = i
-            wait(0.03)
-        end
-    end
-end)
+animateBorderGlow(MainStroke)
 
--- Subtítulo Edition
-local EditionLabel = Instance.new("TextLabel")
-EditionLabel.Size = UDim2.new(1, 0, 0, 16)
-EditionLabel.Position = UDim2.new(0, 0, 0, 44)
-EditionLabel.BackgroundTransparency = 1
-EditionLabel.Text = isPremiumUser and "Edition: Premium" or "FreeMium"
-EditionLabel.TextSize = 11
-EditionLabel.Font = Enum.Font.Gotham
-EditionLabel.TextColor3 = isPremiumUser and Color3.fromRGB(255, 215, 0) or Color3.fromRGB(120, 120, 130)
-EditionLabel.TextTransparency = 1
-EditionLabel.Parent = MainFrame
+-- Título
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(1, -40, 0, 50)
+Title.Position = UDim2.new(0, 20, 0, 15)
+Title.BackgroundTransparency = 1
+Title.Text = "Isme Joiner"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 28
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Parent = MainFrame
 
-TweenService:Create(EditionLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.4), {
-    TextTransparency = 0
-}):Play()
+local TitleStroke = Instance.new("UIStroke")
+TitleStroke.Color = AccentColor
+TitleStroke.Thickness = 1.5
+TitleStroke.Transparency = 0.3
+TitleStroke.Parent = Title
+
+-- Animación del título
+animateBorderGlow(TitleStroke)
+
+-- Toggle Frame
+local ToggleFrame = Instance.new("Frame")
+ToggleFrame.Name = "ToggleFrame"
+ToggleFrame.Size = UDim2.new(0, 140, 0, 50)
+ToggleFrame.Position = UDim2.new(0.5, -70, 0, 80)
+ToggleFrame.BackgroundColor3 = Color3.fromRGB(220, 38, 38)
+ToggleFrame.BorderSizePixel = 0
+ToggleFrame.Parent = MainFrame
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 25)
+ToggleCorner.Parent = ToggleFrame
+
+local ToggleStroke = Instance.new("UIStroke")
+ToggleStroke.Color = Color3.fromRGB(185, 28, 28)
+ToggleStroke.Thickness = 2
+ToggleStroke.Parent = ToggleFrame
 
 -- Toggle Button
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 200, 0, 40)
-ToggleButton.Position = UDim2.new(0.5, -100, 0, 75)
-ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
-ToggleButton.Text = "Joiner: OFF"
-ToggleButton.TextColor3 = Color3.new(1, 1, 1)
-ToggleButton.TextSize = 16
-ToggleButton.Font = Enum.Font.GothamBold
-ToggleButton.BorderSizePixel = 0
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Size = UDim2.new(1, 0, 1, 0)
 ToggleButton.BackgroundTransparency = 1
-ToggleButton.TextTransparency = 1
-ToggleButton.Parent = MainFrame
+ToggleButton.Text = "OFF"
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextSize = 20
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Parent = ToggleFrame
 
-local ToggleCorner = Instance.new("UICorner")
-ToggleCorner.CornerRadius = UDim.new(0, 10)
-ToggleCorner.Parent = ToggleButton
+-- Texto de Edición
+local EditionLabel = Instance.new("TextLabel")
+EditionLabel.Name = "EditionLabel"
+EditionLabel.Size = UDim2.new(1, -40, 0, 40)
+EditionLabel.Position = UDim2.new(0, 20, 1, -55)
+EditionLabel.BackgroundTransparency = 1
+EditionLabel.Text = "Edition: " .. Edition
+EditionLabel.Font = Enum.Font.GothamBold
+EditionLabel.TextSize = 16
+EditionLabel.TextColor3 = EditionColor
+EditionLabel.Parent = MainFrame
 
-TweenService:Create(ToggleButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0.5), {
-    BackgroundTransparency = 0,
-    TextTransparency = 0
-}):Play()
+local EditionGradient = Instance.new("UIGradient")
+EditionGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, EditionColor),
+    ColorSequenceKeypoint.new(1, AccentColor)
+}
+EditionGradient.Rotation = 45
+EditionGradient.Parent = EditionLabel
 
--- Sistema de notificaciones
+-- Sistema de Notificaciones
 local NotificationContainer = Instance.new("Frame")
-NotificationContainer.Size = UDim2.new(0, 300, 1, 0)
-NotificationContainer.Position = UDim2.new(1, -320, 0, 20)
+NotificationContainer.Name = "NotificationContainer"
+NotificationContainer.Size = UDim2.new(0, 350, 1, 0)
+NotificationContainer.Position = UDim2.new(1, -370, 0, 20)
 NotificationContainer.BackgroundTransparency = 1
 NotificationContainer.Parent = ScreenGui
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Padding = UDim.new(0, 10)
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Parent = NotificationContainer
+local NotificationLayout = Instance.new("UIListLayout")
+NotificationLayout.Padding = UDim.new(0, 10)
+NotificationLayout.SortOrder = Enum.SortOrder.LayoutOrder
+NotificationLayout.Parent = NotificationContainer
 
-local function createNotification(message, duration)
-    local NotifFrame = Instance.new("Frame")
-    NotifFrame.Size = UDim2.new(1, 0, 0, 70)
-    NotifFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    NotifFrame.BorderSizePixel = 0
-    NotifFrame.Position = UDim2.new(0, 300, 0, 0)
-    NotifFrame.Parent = NotificationContainer
+local function createNotification(title, message, duration)
+    local Notification = Instance.new("Frame")
+    Notification.Name = "Notification"
+    Notification.Size = UDim2.new(1, 0, 0, 0)
+    Notification.BackgroundColor3 = Color3.fromRGB(23, 23, 37)
+    Notification.BorderSizePixel = 0
+    Notification.ClipsDescendants = true
+    Notification.Parent = NotificationContainer
     
     local NotifCorner = Instance.new("UICorner")
-    NotifCorner.CornerRadius = UDim.new(0, 10)
-    NotifCorner.Parent = NotifFrame
+    NotifCorner.CornerRadius = UDim.new(0, 12)
+    NotifCorner.Parent = Notification
     
-    local NotifText = Instance.new("TextLabel")
-    NotifText.Size = UDim2.new(1, -20, 0, 35)
-    NotifText.Position = UDim2.new(0, 10, 0, 10)
-    NotifText.BackgroundTransparency = 1
-    NotifText.Text = message
-    NotifText.TextSize = 14
-    NotifText.Font = Enum.Font.Gotham
-    NotifText.TextColor3 = Color3.new(1, 1, 1)
-    NotifText.TextXAlignment = Enum.TextXAlignment.Left
-    NotifText.Parent = NotifFrame
+    local NotifStroke = Instance.new("UIStroke")
+    NotifStroke.Color = EditionColor
+    NotifStroke.Thickness = 1.5
+    NotifStroke.Transparency = 0.5
+    NotifStroke.Parent = Notification
     
-    -- Contenedor de la barra de progreso
-    local ProgressBG = Instance.new("Frame")
-    ProgressBG.Size = UDim2.new(1, -20, 0, 4)
-    ProgressBG.Position = UDim2.new(0, 10, 1, -14)
-    ProgressBG.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    ProgressBG.BorderSizePixel = 0
-    ProgressBG.Parent = NotifFrame
+    local NotifTitle = Instance.new("TextLabel")
+    NotifTitle.Name = "Title"
+    NotifTitle.Size = UDim2.new(1, -20, 0, 25)
+    NotifTitle.Position = UDim2.new(0, 10, 0, 8)
+    NotifTitle.BackgroundTransparency = 1
+    NotifTitle.Text = title
+    NotifTitle.Font = Enum.Font.GothamBold
+    NotifTitle.TextSize = 16
+    NotifTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    NotifTitle.TextXAlignment = Enum.TextXAlignment.Left
+    NotifTitle.Parent = Notification
     
-    local ProgressCorner = Instance.new("UICorner")
-    ProgressCorner.CornerRadius = UDim.new(1, 0)
-    ProgressCorner.Parent = ProgressBG
+    local NotifMessage = Instance.new("TextLabel")
+    NotifMessage.Name = "Message"
+    NotifMessage.Size = UDim2.new(1, -20, 0, 20)
+    NotifMessage.Position = UDim2.new(0, 10, 0, 33)
+    NotifMessage.BackgroundTransparency = 1
+    NotifMessage.Text = message
+    NotifMessage.Font = Enum.Font.Gotham
+    NotifMessage.TextSize = 13
+    NotifMessage.TextColor3 = Color3.fromRGB(180, 180, 180)
+    NotifMessage.TextXAlignment = Enum.TextXAlignment.Left
+    NotifMessage.TextWrapped = true
+    NotifMessage.Parent = Notification
     
     -- Barra de progreso
     local ProgressBar = Instance.new("Frame")
-    ProgressBar.Size = UDim2.new(1, 0, 1, 0)
-    ProgressBar.BackgroundColor3 = isPremiumUser and Color3.fromRGB(255, 200, 0) or Color3.fromRGB(80, 220, 120)
+    ProgressBar.Name = "ProgressBar"
+    ProgressBar.Size = UDim2.new(1, 0, 0, 3)
+    ProgressBar.Position = UDim2.new(0, 0, 1, -3)
+    ProgressBar.BackgroundColor3 = EditionColor
     ProgressBar.BorderSizePixel = 0
-    ProgressBar.Parent = ProgressBG
-    
-    local BarCorner = Instance.new("UICorner")
-    BarCorner.CornerRadius = UDim.new(1, 0)
-    BarCorner.Parent = ProgressBar
+    ProgressBar.Parent = Notification
     
     -- Animación de entrada
-    TweenService:Create(NotifFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2.new(0, 0, 0, 0)
-    }):Play()
-    
-    -- Animación de la barra
-    local progressTween = TweenService:Create(ProgressBar, TweenInfo.new(duration, Enum.EasingStyle.Linear), {
-        Size = UDim2.new(0, 0, 1, 0)
+    local targetHeight = 70
+    local openTween = TweenService:Create(Notification, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Size = UDim2.new(1, 0, 0, targetHeight)
     })
-    progressTween:Play()
+    openTween:Play()
     
-    -- Eliminar notificación
+    -- Animación de la barra de progreso
+    local progressTween = TweenService:Create(ProgressBar, TweenInfo.new(duration, Enum.EasingStyle.Linear), {
+        Size = UDim2.new(0, 0, 0, 3)
+    })
+    
+    openTween.Completed:Connect(function()
+        progressTween:Play()
+    end)
+    
+    -- Eliminar después de la duración
     task.delay(duration, function()
-        local exitTween = TweenService:Create(NotifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
-            Position = UDim2.new(0, 300, 0, 0)
+        local closeTween = TweenService:Create(Notification, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(1, 0, 0, 0)
         })
-        exitTween:Play()
-        exitTween.Completed:Wait()
-        NotifFrame:Destroy()
+        closeTween:Play()
+        closeTween.Completed:Connect(function()
+            Notification:Destroy()
+        end)
     end)
 end
 
--- Función para buscar servidor
+-- Función de Server Hopping
 local function serverHop()
-    if not joinerEnabled then return end
+    if ServerHopping then return end
+    ServerHopping = true
     
-    createNotification("🔍 Buscando servidor...", 3)
+    createNotification("Isme Joiner", "Buscando servidor disponible...", 3)
     
     local success, result = pcall(function()
-        local servers = HttpService:JSONDecode(game:HttpGet(
-            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-        ))
+        local servers = {}
+        local cursor = ""
         
-        if servers and servers.data then
-            for _, server in pairs(servers.data) do
-                if server.id ~= game.JobId and server.playing < server.maxPlayers then
-                    createNotification("✅ Servidor encontrado! Conectando...", 2)
-                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
-                    return
+        repeat
+            local url = string.format(
+                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&cursor=%s",
+                game.PlaceId,
+                cursor
+            )
+            
+            local response = game:HttpGet(url)
+            local data = HttpService:JSONDecode(response)
+            
+            if data.data then
+                for _, server in ipairs(data.data) do
+                    if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                        table.insert(servers, server.id)
+                    end
                 end
             end
+            
+            cursor = data.nextPageCursor or ""
+        until cursor == "" or #servers >= 10
+        
+        if #servers > 0 then
+            local randomServer = servers[math.random(1, #servers)]
+            createNotification("Isme Joiner", "Servidor encontrado! Teleportando...", 2)
+            
+            task.wait(1)
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, randomServer, LocalPlayer)
+        else
+            createNotification("Isme Joiner", "No se encontraron servidores disponibles", 3)
+            ServerHopping = false
         end
     end)
     
     if not success then
-        createNotification("⚠️ Error. Reintentando...", 4)
-        wait(5)
-        if joinerEnabled then
-            serverHop()
-        end
+        createNotification("Error", "No se pudo conectar al servidor", 3)
+        ServerHopping = false
     end
 end
 
--- Toggle functionality
-ToggleButton.MouseButton1Click:Connect(function()
-    joinerEnabled = not joinerEnabled
-    
-    -- Animación del botón
-    local scaleTween = TweenService:Create(ToggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 190, 0, 38)
-    })
-    scaleTween:Play()
-    scaleTween.Completed:Wait()
-    
-    TweenService:Create(ToggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 200, 0, 40)
-    }):Play()
-    
-    if joinerEnabled then
-        TweenService:Create(ToggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = Color3.fromRGB(50, 200, 80)
-        }):Play()
-        ToggleButton.Text = "Joiner: ON"
-        createNotification("🚀 Joiner activado", 2)
+-- Loop del Joiner
+local function joinerLoop()
+    while JoinerActive do
         serverHop()
+        task.wait(5)
+    end
+end
+
+-- Toggle Button Click
+ToggleButton.MouseButton1Click:Connect(function()
+    JoinerActive = not JoinerActive
+    
+    local targetColor = JoinerActive and Color3.fromRGB(34, 197, 94) or Color3.fromRGB(220, 38, 38)
+    local targetStrokeColor = JoinerActive and Color3.fromRGB(22, 163, 74) or Color3.fromRGB(185, 28, 28)
+    
+    local colorTween = TweenService:Create(ToggleFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+        BackgroundColor3 = targetColor
+    })
+    
+    local strokeTween = TweenService:Create(ToggleStroke, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+        Color = targetStrokeColor
+    })
+    
+    colorTween:Play()
+    strokeTween:Play()
+    
+    ToggleButton.Text = JoinerActive and "ON" or "OFF"
+    
+    -- Animación de escala al hacer clic
+    local scaleDown = TweenService:Create(ToggleFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 130, 0, 45)
+    })
+    local scaleUp = TweenService:Create(ToggleFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 140, 0, 50)
+    })
+    
+    scaleDown:Play()
+    scaleDown.Completed:Connect(function()
+        scaleUp:Play()
+    end)
+    
+    if JoinerActive then
+        createNotification("Isme Joiner", "Joiner activado - " .. Edition, 3)
+        task.spawn(joinerLoop)
     else
-        TweenService:Create(ToggleButton, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = Color3.fromRGB(180, 40, 40)
-        }):Play()
-        ToggleButton.Text = "Joiner: OFF"
-        createNotification("🛑 Joiner desactivado", 2)
+        createNotification("Isme Joiner", "Joiner desactivado", 3)
+        ServerHopping = false
     end
 end)
 
--- Hacer draggable
+-- Hover effect
+ToggleButton.MouseEnter:Connect(function()
+    local hoverTween = TweenService:Create(ToggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        Size = UDim2.new(0, 145, 0, 52)
+    })
+    hoverTween:Play()
+end)
+
+ToggleButton.MouseLeave:Connect(function()
+    local leaveTween = TweenService:Create(ToggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+        Size = UDim2.new(0, 140, 0, 50)
+    })
+    leaveTween:Play()
+end)
+
+-- Hacer el frame draggable
 local dragging, dragInput, dragStart, startPos
 
+local function update(input)
+    local delta = input.Position - dragStart
+    local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    
+    local moveTween = TweenService:Create(MainFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
+        Position = targetPos
+    })
+    moveTween:Play()
+end
+
 MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
         startPos = MainFrame.Position
         
-        TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-            Size = UDim2.new(0, 235, 0, 128)
-        }):Play()
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
     end
 end)
 
 MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
-    end
-end)
-
-MainFrame.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-        TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-            Size = UDim2.new(0, 240, 0, 130)
-        }):Play()
     end
 end)
 
 game:GetService("UserInputService").InputChanged:Connect(function(input)
     if input == dragInput and dragging then
-        local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
+        update(input)
     end
 end)
 
+-- Animación de entrada inicial
+MainFrame.Size = UDim2.new(0, 0, 0, 0)
+local introTween = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 320, 0, 240)
+})
+introTween:Play()
+
 -- Notificación de bienvenida
-wait(0.6)
-if isPremiumUser then
-    createNotification("👑 Welcome, Premium User!", 3)
-else
-    createNotification("👋 Welcome, to Isme Joiner", 3)
-end
+task.wait(0.6)
+createNotification("Isme Joiner", "Bienvenido! Edition: " .. Edition, 4)
